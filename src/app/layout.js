@@ -1,5 +1,6 @@
 import { Roboto_Slab, Patua_One } from "next/font/google";
 import "./globals.css";
+import { ThemeProvider } from "@/context/ThemeContext";
 
 const robotoSlab = Roboto_Slab({
     subsets: ["latin"],
@@ -27,7 +28,9 @@ export default function RootLayout({ children }) {
             className={`${robotoSlab.variable} ${patuaOne.variable} h-full antialiased`}
         >
             <body className="min-h-full">
-                {children}
+                <ThemeProvider>
+                    {children}
+                </ThemeProvider>
             </body>
         </html>
     );
