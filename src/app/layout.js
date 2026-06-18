@@ -16,7 +16,7 @@ const patuaOne = Patua_One({
 });
 
 export const metadata = {
-    title: "Rentiva",
+    title: "RENTIVA",
     description: "Property Rental & Booking Platform",
 };
 
