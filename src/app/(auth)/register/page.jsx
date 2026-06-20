@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
-import { Eye, EyeOff, Mail, Lock, User, Image as ImageIcon, ArrowRight, Briefcase } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, User, Image as ImageIcon, ArrowRight, UsersRound } from "lucide-react";
 import { FcGoogle } from "react-icons/fc";
 import { FaHome } from "react-icons/fa";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -74,7 +74,7 @@ function Register() {
                 <span>Go Home</span>
             </Link>
 
-            <div className="max-w-md w-full space-y-6 bg-white/70 dark:bg-[#1B3C53]/60 border border-slate-200 dark:border-slate-700/50 p-8 rounded-3xl backdrop-blur-xl shadow-xl relative z-10">
+            <div className="max-w-md w-full space-y-6 bg-white/70 dark:bg-[#1B3C53]/60 border border-slate-200 dark:border-slate-600 p-8 rounded-3xl backdrop-blur-xl shadow-xl relative z-10">
 
                 {/* Header */}
                 <div className="text-center space-y-2">
@@ -110,7 +110,7 @@ function Register() {
                                     required: "Name is required"
                                 })}
                                 className={`w-full pl-11 pr-4 py-3 bg-white dark:bg-[#1B3C53] border rounded-xl text-sm focus:outline-none focus:ring-2 transition-all text-gray-900 dark:text-white
-                                ${errors.name ? "border-red-500 focus:ring-red-500/20" : "border-slate-200 dark:border-slate-700/50 focus:border-[#76ABAE] focus:ring-[#76ABAE]/20"}`}
+                                ${errors.name ? "border-red-500 focus:ring-red-500/20" : "border-slate-200 dark:border-slate-600 focus:border-[#76ABAE] focus:ring-[#76ABAE]/20"}`}
                             />
                         </div>
                         {errors.name && (
@@ -139,7 +139,7 @@ function Register() {
                                 className={`w-full pl-11 pr-4 py-3 bg-white dark:bg-[#1B3C53] border rounded-xl text-sm focus:outline-none focus:ring-2 transition-all text-gray-900 dark:text-white
                                 ${errors.email
                                         ? "border-red-500 focus:ring-red-500/20"
-                                        : "border-slate-200 dark:border-slate-700/50 focus:border-[#76ABAE] focus:ring-[#76ABAE]/20"
+                                        : "border-slate-200 dark:border-slate-600 focus:border-[#76ABAE] focus:ring-[#76ABAE]/20"
                                     }
                                 `}
                             />
@@ -158,12 +158,15 @@ function Register() {
                         </label>
                         <div className="relative">
                             <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-400">
-                                <Briefcase size={18} />
+                                <UsersRound  size={18} />
                             </span>
                             <select
                                 {...register("role")}
-                                className="w-full pl-11 pr-4 py-3 bg-white dark:bg-[#1B3C53] border border-slate-200 dark:border-slate-700/50 rounded-xl text-sm focus:outline-none focus:border-[#76ABAE] focus:ring-2 focus:ring-[#76ABAE]/20 transition-all text-gray-900 dark:text-white appearance-none cursor-pointer"
+                                className="w-full pl-11 pr-4 py-3 bg-white dark:bg-[#1B3C53] border border-slate-200 dark:border-slate-600 rounded-xl text-sm focus:outline-none focus:border-[#76ABAE] focus:ring-2 focus:ring-[#76ABAE]/20 transition-all text-gray-900 dark:text-white appearance-none cursor-pointer"
                             >
+                                <option defaultValue="" disabled selected>
+                                    Select Role
+                                </option>
                                 <option value="tenant">Tenant</option>
                                 <option value="owner">Landlord</option>
                             </select>
@@ -198,7 +201,7 @@ function Register() {
                                     }
                                 })}
                                 className={`w-full pl-11 pr-12 py-3 bg-white dark:bg-[#1B3C53] border rounded-xl text-sm focus:outline-none focus:ring-2 transition-all text-gray-900 dark:text-white
-                                ${errors.password ? "border-red-500 focus:ring-red-500/20" : "border-slate-200 dark:border-slate-700/50 focus:border-[#76ABAE] focus:ring-[#76ABAE]/20"}`}
+                                ${errors.password ? "border-red-500 focus:ring-red-500/20" : "border-slate-200 dark:border-slate-600 focus:border-[#76ABAE] focus:ring-[#76ABAE]/20"}`}
                             />
                             <button
                                 type="button"
@@ -232,7 +235,7 @@ function Register() {
                                 type="url"
                                 placeholder="https://example.com/avatar.png"
                                 {...register("imageUrl")}
-                                className="w-full pl-11 pr-4 py-3 bg-white dark:bg-[#1B3C53] border border-slate-200 dark:border-slate-700/50 rounded-xl text-sm focus:outline-none focus:border-[#76ABAE] focus:ring-2 focus:ring-[#76ABAE]/20 transition-all text-gray-900 dark:text-white"
+                                className="w-full pl-11 pr-4 py-3 bg-white dark:bg-[#1B3C53] border border-slate-200 dark:border-slate-600 rounded-xl text-sm focus:outline-none focus:border-[#76ABAE] focus:ring-2 focus:ring-[#76ABAE]/20 transition-all text-gray-900 dark:text-white"
                             />
                         </div>
                     </div>
@@ -248,17 +251,17 @@ function Register() {
 
                 {/* Divider */}
                 <div className="relative flex py-1 items-center">
-                    <div className="flex-grow border-t border-slate-200 dark:border-slate-700/50" />
+                    <div className="flex-grow border-t border-slate-200 dark:border-slate-600" />
                     <span className="flex-shrink mx-4 text-xs text-gray-400 uppercase tracking-wider font-semibold">
                         Or connect with
                     </span>
-                    <div className="flex-grow border-t border-slate-200 dark:border-slate-700/50" />
+                    <div className="flex-grow border-t border-slate-200 dark:border-slate-600" />
                 </div>
 
                 {/* Google */}
                 <button
                     onClick={handleGoogleLogin}
-                    className="w-full flex items-center justify-center gap-3 bg-white dark:bg-[#1B3C53] border border-slate-200 dark:border-slate-700/50 hover:bg-slate-100 dark:hover:bg-slate-800/60 text-slate-800 dark:text-white font-medium py-3 rounded-xl transition-all text-sm cursor-pointer shadow-sm"
+                    className="w-full flex items-center justify-center gap-3 bg-white dark:bg-[#1B3C53] border border-slate-200 dark:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-800/60 text-slate-800 dark:text-white font-medium py-3 rounded-xl transition-all text-sm cursor-pointer shadow-sm"
                 >
                     <FcGoogle size={20} /> Continue with Google
                 </button>
@@ -268,10 +271,10 @@ function Register() {
                     <p className="text-sm text-gray-500 dark:text-slate-300">
                         Already have an account?{" "}
                         <Link
-                            href="/signin"
+                            href="/login"
                             className="font-semibold text-[#76ABAE] hover:underline"
                         >
-                            Sign In
+                            Login
                         </Link>
                     </p>
                 </div>
