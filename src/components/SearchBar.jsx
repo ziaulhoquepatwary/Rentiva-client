@@ -17,7 +17,7 @@ export default function SearchBar() {
     return (
         <form
       onSubmit={handleSearch}
-      className="w-full max-w-5xl rounded-2xl p-6 shadow-xl border bg-white dark:bg-[#1B3C53] border-[#E2E8F0] dark:border-[#64748B] transition-colors duration-300"
+      className="w-full max-w-5xl rounded-2xl p-6 shadow-xl border bg-gray-200 dark:bg-[#1B3C53] border-[#E2E8F0] dark:border-[#64748B] transition-colors duration-300"
     >
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 items-end">
         

@@ -1,6 +1,7 @@
 import { Roboto_Slab, Patua_One } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/context/ThemeContext";
+import AuthProvider from "@/components/AuthProvider";
 
 const robotoSlab = Roboto_Slab({
     subsets: ["latin"],
@@ -29,7 +30,9 @@ export default function RootLayout({ children }) {
         >
             <body className="min-h-full">
                 <ThemeProvider>
-                    {children}
+                    <AuthProvider>
+                        {children}
+                    </AuthProvider>
                 </ThemeProvider>
             </body>
         </html>
