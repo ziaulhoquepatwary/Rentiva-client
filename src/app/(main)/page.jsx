@@ -1,8 +1,8 @@
 import Banner from '@/components/Banner'
 import FeaturedProperties from '@/components/FeaturedProperties'
+import Reviews from '@/components/Reviews'
 import WhyChooseUs from '@/components/WhyChooseUs'
 import Footer from '@/share/Footer'
-import React from 'react'
 
 function Home() {
     return (
@@ -10,6 +10,7 @@ function Home() {
             <Banner />
             <FeaturedProperties />
             <WhyChooseUs />
+            <Reviews />
             <Footer />
         </div>
     )
