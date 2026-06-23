@@ -4,8 +4,8 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { Search, Bell, Menu, User as UserIcon, LogOut } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
-import ThemeToggle from "@/component/ThemeToggle";
 import Loading from "@/app/loading";
+import ThemeToggle from "@/components/ThemeToggle";
 
 function DashboardHeader({ onMenuClick }) {
     const { data: session, isPending } = authClient.useSession();
@@ -92,7 +92,7 @@ function DashboardHeader({ onMenuClick }) {
                                     src={user?.image || "/user.png"}
                                     alt={user?.name}
                                     className="w-10 h-10 rounded-full object-cover"
-                                    lock / />
+                                />
                                 <div className="overflow-hidden">
                                     <p className="text-sm font-semibold text-[#1B3C53] dark:text-[#EEEEEE] truncate">{user?.name}</p>
                                     <p className="text-xs text-gray-400 dark:text-gray-400 truncate">{user?.email}</p>

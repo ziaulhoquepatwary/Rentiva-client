@@ -19,9 +19,13 @@ function Navbar() {
     const user = session?.user;
     const role = user?.role;
 
-    // missing variables ডিফাইন করা হলো
     const showDashboard = !!role;
-    const dashboardHref = role === 'admin' ? '/admin/dashboard' : '/dashboard';
+
+    const dashboardHref = role === 'admin'
+        ? '/admin'
+        : role === 'owner'
+            ? '/owner'
+            : '/tenant';
 
     const isActive = (path) => pathname === path;
 
@@ -189,7 +193,7 @@ function Navbar() {
                                             ? 'border-slate-600 text-white hover:bg-slate-800/60'
                                             : 'border-slate-300 text-slate-800 hover:bg-slate-100'
                                         }`}
-                                    align>
+                                >
                                     Login
                                 </Link>
                                 <Link
