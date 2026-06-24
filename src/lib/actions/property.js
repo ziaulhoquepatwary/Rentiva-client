@@ -2,6 +2,18 @@ import axios from "axios";
 
 const baseApiUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
+export const createPropertyApi = async (propertyData) => {
+    try {
+        const res = await axios.post(`${baseApiUrl}/api/properties`, propertyData, {
+            withCredentials: true,
+        });
+        return res.data;
+    } catch (error) {
+        console.error("API error response:", error.response?.data || error.message);
+        throw error;
+    }
+};
+
 export const getAllPropertiesAction = async (filters = {}) => {
     try {
         const params = new URLSearchParams();

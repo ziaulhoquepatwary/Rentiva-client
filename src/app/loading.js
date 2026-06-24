@@ -1,6 +1,6 @@
 export default function Loading() {
     return (
-        <section className="min-h-screen bg-white dark:bg-[#1B3C53] flex items-center justify-center px-4 transition-colors duration-300">
+        <section className="fixed inset-0 z-50 bg-white dark:bg-[#1B3C53] flex items-center justify-center px-4">
             <div className="flex flex-col items-center">
 
                 {/* Animated Logo Circle */}

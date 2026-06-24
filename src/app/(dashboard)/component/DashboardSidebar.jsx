@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LayoutDashboard, FilePlus, Heart, User, Building2, Briefcase, Users, Clock, ChevronRight } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
-import Loading from "@/app/loading";
 
 const MENU_CONFIG = {
     tenant: [
@@ -35,7 +34,7 @@ function DashboardSidebar({ isOpen, closeSidebar }) {
     const user = session?.user;
     const role = user?.role;
 
-    if (isPending) return <Loading />;
+    if (isPending) return <div>Loading...</div>;
     if (!user || !role) return null;
 
     const menuItems = MENU_CONFIG[role] || [];
@@ -71,7 +70,7 @@ function DashboardSidebar({ isOpen, closeSidebar }) {
                 <nav className="px-3 space-y-1">
                     {menuItems.map((item) => {
                         const Icon = item.icon;
-                        const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
+                        const isActive = item.href === "/" + role ? pathname === item.href : pathname.startsWith(item.href + "/") || pathname === item.href;
 
                         return (
                             <Link
