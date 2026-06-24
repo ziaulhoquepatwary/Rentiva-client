@@ -3,9 +3,12 @@
 import { createPropertyApi } from "@/lib/actions/property";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
 import PropertyForm from "./PropertyForm";
 
 function AddProperty() {
+    const router = useRouter();
     const { register, handleSubmit, formState: { errors }, reset, setValue, watch } = useForm({
         defaultValues: {
             amenities: [],
@@ -14,7 +17,6 @@ function AddProperty() {
     });
 
     const [loading, setLoading] = useState(false);
-    const [message, setMessage] = useState("");
 
     const amenitiesWatch = watch("amenities") || [];
     const imagesWatch = watch("images") || [];
@@ -46,7 +48,6 @@ function AddProperty() {
 
     const onSubmit = async (data) => {
         setLoading(true);
-        setMessage("");
         try {
             const formattedData = {
                 ...data,
@@ -57,12 +58,28 @@ function AddProperty() {
             };
 
             await createPropertyApi(formattedData);
-            setMessage("Property added successfully!");
-            reset();
-            setValue("amenities", []);
-            setValue("images", []);
+
+            Swal.fire({
+                icon: "success",
+                title: "Property Added!",
+                text: "Your property has been added successfully.",
+                confirmButtonColor: "#76ABAE",
+                confirmButtonText: "Go to My Properties"
+            }).then(() => {
+                reset();
+                setValue("amenities", []);
+                setValue("images", []);
+                router.push("/owner/my-properties");
+            });
         } catch (error) {
-            setMessage(error.response?.data?.message || "Failed to add property");
+            const errorMessage = error.response?.data?.message || "Failed to add property";
+
+            Swal.fire({
+                icon: "error",
+                title: "Error!",
+                text: errorMessage,
+                confirmButtonColor: "#76ABAE"
+            });
         } finally {
             setLoading(false);
         }
@@ -89,12 +106,6 @@ function AddProperty() {
                 addImage={addImage}
                 removeImage={removeImage}
             />
-
-            {message && (
-                <div className={`p-4 mt-4 rounded-xl text-center border text-sm ${message.includes("successfully") ? "bg-green-50 border-green-200 text-green-600 dark:bg-green-950/20 dark:border-green-900" : "bg-red-50 border-red-200 text-red-500 dark:bg-red-950/20 dark:border-red-900"}`}>
-                    {message}
-                </div>
-            )}
         </div>
     );
 }

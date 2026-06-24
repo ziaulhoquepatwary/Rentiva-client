@@ -65,3 +65,16 @@ export const getAllPropertiesAction = async (filters = {}) => {
         throw error;
     }
 };
+
+export const getMyPropertiesApi = async (page = 1, limit = 12) => {
+    try {
+        const res = await axios.get(`${baseApiUrl}/api/properties/owner-property`, {
+            params: { page, limit },
+            withCredentials: true,
+        });
+        return res.data;
+    } catch (error) {
+        console.error("API error response:", error.response?.data || error.message);
+        throw error;
+    }
+};
