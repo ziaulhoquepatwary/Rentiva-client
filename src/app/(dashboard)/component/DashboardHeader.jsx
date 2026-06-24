@@ -102,7 +102,7 @@ function DashboardHeader({ onMenuClick }) {
                             {/* Actions List */}
                             <div className="p-2">
                                 <Link
-                                    href="/my-profile"
+                                    href={`/${user.role}/profile`}
                                     onClick={() => setAvatarMenuOpen(false)}
                                     className="flex items-center gap-2 w-full px-3 py-2 text-sm text-[#1B3C53] dark:text-[#EEEEEE] rounded-lg hover:bg-[#E2E8F0] dark:hover:bg-[#64748B] transition-colors"
                                 >

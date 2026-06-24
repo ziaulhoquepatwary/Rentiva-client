@@ -151,7 +151,7 @@ function Navbar() {
                                                 </Link>
                                             )}
                                             <Link
-                                                href="/my-profile"
+                                                href={`/${user.role}/profile`}
                                                 onClick={() => setAvatarMenuOpen(false)}
                                                 className={`flex items-center gap-3 w-full px-4 py-3 text-sm rounded-lg font-medium transition-colors
                                                     ${isDarkMode
@@ -286,7 +286,7 @@ function Navbar() {
                                 )}
 
                                 <Link
-                                    href="/my-profile"
+                                    href={`/${user.role}/profile`}
                                     onClick={() => setIsOpen(false)}
                                     className={`flex items-center justify-center gap-2 w-full py-3 rounded-lg font-medium border transition-colors
                                         ${isDarkMode
