@@ -1,3 +1,4 @@
+import Footer from "@/share/Footer"
 import Navbar from "@/share/Navbar"
 
 function MainLayout({ children }) {
@@ -7,6 +8,7 @@ function MainLayout({ children }) {
             <main className="grow">
                 {children}
             </main>
+            <Footer />
         </div>
     )
 }

@@ -13,7 +13,7 @@ async function FeaturedProperties() {
 
 
     return (
-        <section className="w-full bg-white dark:bg-[#1B3C53] py-16 md:py-24 text-[#1B3C53] dark:text-[#EEEEEE] transition-colors duration-300">
+        <section className="w-full bg-white dark:bg-[#1B3C53] py-10 md:py-12 text-[#1B3C53] dark:text-[#EEEEEE] transition-colors duration-300">
             <div className="max-w-7xl mx-auto px-4">
 
                 {/* Section Header */}
