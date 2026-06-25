@@ -3,7 +3,7 @@ import { MapPin, Home, DollarSign, ArrowRight } from "lucide-react";
 import Link from "next/link";
 
 export default function PropertyCard({ property }) {
-    const { id, title, location, propertyType, rent, images } = property;
+    const { _id, title, location, propertyType, rent, images } = property;
 
     // Handles both single string URL and array of image URLs safely
     const displayImage = Array.isArray(images)
@@ -54,7 +54,7 @@ export default function PropertyCard({ property }) {
                 {/* View Details Action Button */}
                 <div className="pt-2 border-t border-[#E2E8F0] dark:border-[#64748B]/20">
                     <Link
-                        href={`/properties/${id}`}
+                        href={`/properties/${_id}`}
                         className="w-full py-2.5 rounded-xl border border-[#1B3C53] dark:border-[#76ABAE] text-[#1B3C53] dark:text-[#76ABAE] hover:bg-[#1B3C53] hover:text-white dark:hover:bg-[#76ABAE] dark:hover:text-[#1B3C53] text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-2 transition-all duration-200 active:scale-[0.98]"
                     >
                         <span>View Details</span>
