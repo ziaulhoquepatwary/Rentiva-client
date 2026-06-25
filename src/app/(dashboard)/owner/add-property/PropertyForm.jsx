@@ -69,14 +69,27 @@ function PropertyForm({
 
                 <div>
                     <label className="block text-sm font-medium mb-1">Property Type</label>
-                    <input
-                        type="text"
-                        placeholder="e.g. Apartment, House"
+                    <select
                         {...register("propertyType", { required: "Property type is required" })}
-                        className="w-full px-4 py-2 text-sm rounded-xl border outline-none bg-slate-50 border-[#E2E8F0] text-[#1B3C53] focus:border-[#76ABAE] dark:bg-[#64748B]/30 dark:border-[#64748B] dark:text-[#EEEEEE] dark:focus:border-[#76ABAE]"
-                    />
-                    {errors.propertyType && <p className="text-xs text-red-500 mt-1">{errors.propertyType.message}</p>}
+                        className="w-full px-4 py-2 text-sm rounded-xl border outline-none bg-slate-50 border-[#E2E8F0] text-[#1B3C53] focus:border-[#76ABAE] dark:bg-[#1B3C53] dark:border-[#64748B] dark:text-[#EEEEEE] dark:focus:border-[#76ABAE]"
+                    >
+                        <option value="">Select Type</option>
+                        <option value="apartment">Apartment</option>
+                        <option value="house">House</option>
+                        <option value="villa">Villa</option>
+                        <option value="cottage">Cottage</option>
+                        <option value="studio">Studio</option>
+                        <option value="duplex">Duplex</option>
+                        <option value="penthouse">Penthouse</option>
+                        <option value="commercial">Commercial Space</option>
+                        <option value="office">Office Room</option>
+                        <option value="other">Other</option>
+                    </select>
+                    {errors.propertyType && (
+                        <p className="text-xs text-red-500 mt-1">{errors.propertyType.message}</p>
+                    )}
                 </div>
+
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

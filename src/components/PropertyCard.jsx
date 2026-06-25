@@ -11,7 +11,7 @@ export default function PropertyCard({ property }) {
         : (images || "https://images.unsplash.com/photo-1564013799919-ab600027ffc6");
 
     return (
-        <div className="group bg-white dark:bg-[#1B3C53] border border-[#E2E8F0] dark:border-[#64748B]/30 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col h-full">
+        <div className="group bg-white dark:bg-[#224964] border border-[#E2E8F0] dark:border-[#64748B]/30 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col h-full">
 
             {/* Image Container */}
             <div className="relative aspect-[4/3] w-full overflow-hidden bg-gray-100">
