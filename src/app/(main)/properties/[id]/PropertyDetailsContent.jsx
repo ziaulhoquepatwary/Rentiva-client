@@ -178,7 +178,7 @@ function PropertyDetailsContent({ id }) {
                             </div>
 
                             {/* Action Buttons Component */}
-                            <PropertyActionButtons propertyId={property._id} />
+                            <PropertyActionButtons property={property} />
 
                             <div className="h-px bg-slate-100 dark:bg-slate-700/50 w-full" />
 
