@@ -25,6 +25,7 @@ export default function PropertyActionButtons({ property }) {
                     rent: property.rent,
                     rentType: property.rentType,
                     image: property.images?.[0] || "",
+                    durationType: property.rentType,  // rentType go like "Yearly", 'Monthly', 'Weekly', 'Daily'
                 }),
             });
 
