@@ -76,10 +76,10 @@ export const getPropertyDetail = async (id) => {
     }
 }
 
-export const getMyPropertiesApi = async (page = 1, limit = 12) => {
+export const getMyPropertiesApi = async (page = 1, limit = 12, status = "Approved") => {
     try {
         const res = await axios.get(`${baseApiUrl}/api/properties/owner-property`, {
-            params: { page, limit },
+            params: { page, limit, status },
             withCredentials: true,
         });
         return res.data;
