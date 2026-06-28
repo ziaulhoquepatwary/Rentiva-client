@@ -4,6 +4,7 @@ import React, { useEffect, useState } from "react";
 import { Star, MessageSquare, Loader2, Trash2 } from "lucide-react";
 import { getPropertyReviewsApi, createReviewApi, deleteReviewApi } from "@/lib/actions/review";
 import Swal from "sweetalert2";
+import { authClient } from "@/lib/auth-client";
 
 export default function PropertyReviews({ propertyId }) {
     const [rating, setRating] = useState(5);
@@ -13,7 +14,10 @@ export default function PropertyReviews({ propertyId }) {
     const [loading, setLoading] = useState(true);
     const [submitting, setSubmitting] = useState(false);
 
-    console.log(propertyId);
+    const { data: session } = authClient.useSession();
+    const user = session?.user;
+    const role = user?.role;
+
     // Fetch Reviews from Database
     const fetchReviews = async () => {
         try {
@@ -37,6 +41,16 @@ export default function PropertyReviews({ propertyId }) {
     // Handle Review Submission
     const handleSubmitReview = async (e) => {
         e.preventDefault();
+
+        if (!user) {
+            Swal.fire({
+                icon: "warning",
+                title: "Authentication Required",
+                text: "Please login to write a review.",
+            });
+            return;
+        }
+
         if (!comment.trim()) return;
 
         setSubmitting(true);
@@ -48,7 +62,6 @@ export default function PropertyReviews({ propertyId }) {
             });
 
             if (response.success) {
-                // Prepend newly created review to the UI list
                 setReviews((prev) => [response.data, ...prev]);
                 setComment("");
                 setRating(5);
@@ -66,14 +79,14 @@ export default function PropertyReviews({ propertyId }) {
             Swal.fire({
                 icon: "error",
                 title: "Submission Failed",
-                text: error.response?.data?.message || "Something went wrong! Did you already review this property?",
+                text: error.response?.data?.message || "Something went wrong!",
             });
         } finally {
             setSubmitting(false);
         }
     };
 
-    // Handle Delete (Bonus Feature for clean ownership flow)
+    // Handle Delete
     const handleDeleteReview = async (reviewId) => {
         const result = await Swal.fire({
             title: "Are you sure?",
@@ -164,7 +177,6 @@ export default function PropertyReviews({ propertyId }) {
                     <>
                         {reviews.map((rev) => (
                             <div key={rev._id} className="flex gap-4 pb-5 border-b border-slate-100 dark:border-slate-700/40 last:border-0 last:pb-0 group">
-                                {/* Tenant Avatar from Better-Auth */}
                                 <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 bg-slate-100 dark:bg-slate-700 border border-slate-200/50 dark:border-slate-600">
                                     <img
                                         src={rev.tenantImage || "/avatar-placeholder.png"}
@@ -185,15 +197,15 @@ export default function PropertyReviews({ propertyId }) {
                                                 })}
                                             </span>
                                         </div>
-
-                                        {/* Trash button for removal if the database schema syncs user ownership */}
-                                        <button
-                                            onClick={() => handleDeleteReview(rev._id)}
-                                            className="opacity-0 group-hover:opacity-100 p-1.5 rounded text-rose-500 hover:bg-rose-500/10 transition-all cursor-pointer"
-                                            title="Delete Review"
-                                        >
-                                            <Trash2 size={14} />
-                                        </button>
+                                        {user && user.id === rev.tenantId && (
+                                            <button
+                                                onClick={() => handleDeleteReview(rev._id)}
+                                                className="opacity-0 group-hover:opacity-100 p-1.5 rounded text-rose-500 hover:bg-rose-500/10 transition-all cursor-pointer"
+                                                title="Delete Review"
+                                            >
+                                                <Trash2 size={14} />
+                                            </button>
+                                        )}
                                     </div>
 
                                     {/* Rating Stars Grid */}

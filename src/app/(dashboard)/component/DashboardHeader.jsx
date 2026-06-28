@@ -45,14 +45,6 @@ function DashboardHeader({ onMenuClick }) {
             {/* Right Side Actions */}
             <div className="flex items-center ml-1 gap-3 md:gap-4">
 
-                {/* Notifications */}
-                <button
-                    className="p-2 rounded-xl border relative transition-colors bg-slate-50 border-[#E2E8F0] text-[#1B3C53] hover:bg-[#E2E8F0] dark:bg-[#64748B]/50 dark:border-[#64748B] dark:text-[#EEEEEE] dark:hover:bg-[#1B3C53]"
-                >
-                    <Bell size={18} />
-                    <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full"></span>
-                </button>
-
                 <ThemeToggle />
 
                 <div className="h-8 w-[1px] bg-[#E2E8F0] dark:bg-[#64748B]"></div>

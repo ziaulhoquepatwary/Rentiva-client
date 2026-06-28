@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { Menu, X, Sun, Moon, LayoutDashboard, User, LogOut } from 'lucide-react';
 import { useTheme } from '@/context/ThemeContext';
 import { authClient } from '@/lib/auth-client';
+import ThemeToggle from '@/components/ThemeToggle';
 
 function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
@@ -81,14 +82,7 @@ function Navbar() {
                     <div className="flex items-center gap-3">
 
                         {/* Theme Toggle */}
-                        <button
-                            onClick={toggleTheme}
-                            className={`p-2.5 rounded-xl transition-colors duration-200
-                                ${isDarkMode ? 'hover:bg-slate-800/60' : 'hover:bg-slate-100'}`}
-                            aria-label="Toggle Theme"
-                        >
-                            {isDarkMode ? <Sun size={20} className="text-white" /> : <Moon size={20} />}
-                        </button>
+                        <ThemeToggle />
 
                         {/* Auth — Desktop */}
                         {isPending ? (

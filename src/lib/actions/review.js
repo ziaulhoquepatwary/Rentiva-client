@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const baseApiUrl = process.env.NEXT_PUBLIC_BASE_API_URL;
+const baseApiUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 export const getPropertyReviewsApi = async (propertyId) => {
     try {
@@ -32,6 +32,16 @@ export const deleteReviewApi = async (reviewId) => {
         return res.data;
     } catch (error) {
         console.error("Delete review API error:", error.response?.data || error.message);
+        throw error;
+    }
+};
+
+export const getHomeTopReviewsApi = async () => {
+    try {
+        const res = await axios.get(`${baseApiUrl}/api/reviews/home-reviews`);
+        return res.data;
+    } catch (error) {
+        console.error("Get home reviews API error:", error.response?.data || error.message);
         throw error;
     }
 };
