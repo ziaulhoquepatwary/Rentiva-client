@@ -1,13 +1,12 @@
 "use client";
 
 import { useState, useEffect } from 'react';
-import { Bath, Bed, CheckCircle, MapPin, Maximize2, User, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Bath, Bed, CheckCircle, MapPin, Maximize2, User, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
 import { getPropertyDetail } from '@/lib/actions/property';
 import PropertyActionButtons from './PropertyActionButtons';
 import PropertyReviews from './PropertyReviews';
 
 function PropertyDetailsContent({ id }) {
-    // State to hold the fetched data and loading status
     const [responseData, setResponseData] = useState(null);
     const [loading, setLoading] = useState(true);
     const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -28,8 +27,11 @@ function PropertyDetailsContent({ id }) {
     // Loading State UI
     if (loading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-[#0f172a]">
-                <p className="text-lg font-semibold text-slate-500">Loading property details...</p>
+            <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50 dark:bg-[#1B3C53] gap-3">
+                <Loader2 className="h-10 w-10 animate-spin text-[#76ABAE]" />
+                <p className="text-sm font-medium text-slate-500 dark:text-slate-400 tracking-wide animate-pulse">
+                    Fetching premium property details...
+                </p>
             </div>
         );
     }
@@ -37,13 +39,13 @@ function PropertyDetailsContent({ id }) {
     // Error or Not Found State UI
     if (!responseData || !responseData.success || !responseData.data) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-[#0f172a]">
+            <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-[#1B3C53]">
                 <p className="text-lg font-semibold text-slate-500">Property not found or server error.</p>
             </div>
         );
     }
 
-    const { property, ownerName } = responseData.data;
+    const { property, ownerName, isSaved } = responseData.data;
     const propertyImages = property?.images || [];
 
     // Carousel Handlers
@@ -178,7 +180,7 @@ function PropertyDetailsContent({ id }) {
                             </div>
 
                             {/* Action Buttons Component */}
-                            <PropertyActionButtons property={property} />
+                            <PropertyActionButtons property={property} isSavedFromBackend={isSaved} />
 
                             <div className="h-px bg-slate-100 dark:bg-slate-700/50 w-full" />
 

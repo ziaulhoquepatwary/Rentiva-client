@@ -1,18 +1,47 @@
 "use client";
-import React, { useState } from "react";
+
+import React, { useEffect, useState } from "react";
 import { Heart, CalendarCheck, Loader2 } from "lucide-react";
 import Swal from "sweetalert2";
+import { toggleFavoriteApi } from "@/lib/actions/favorite";
 
-export default function PropertyActionButtons({ property }) {
-    const [isSaved, setIsSaved] = useState(false);
+export default function PropertyActionButtons({ property, isSavedFromBackend }) {
+    const [isSaved, setIsSaved] = useState(isSavedFromBackend || false);
     const [bookingLoading, setBookingLoading] = useState(false);
+    const [favLoading, setFavLoading] = useState(false);
+
+    // Update state if props change dynamically
+    useEffect(() => {
+        setIsSaved(isSavedFromBackend);
+    }, [isSavedFromBackend]);
 
     const handleToggleFavorite = async () => {
-        setIsSaved((prev) => !prev);
+        if (favLoading) return;
+        setFavLoading(true);
+
+        const targetPropertyId = property?._id || property?.id;
+
+        try {
+            const response = await toggleFavoriteApi(targetPropertyId);
+            if (response.success) {
+                setIsSaved(response.isSaved);
+            }
+        } catch (error) {
+            console.error("Failed to toggle favorite:", error);
+            Swal.fire({
+                icon: "error",
+                title: "Error",
+                text: "Failed to update favorite status. Please login first.",
+                confirmButtonColor: "#1B3C53",
+            });
+        } finally {
+            setFavLoading(false);
+        }
     };
 
     const handleTriggerBooking = async () => {
         setBookingLoading(true);
+        const targetPropertyId = property?._id || property?.id;
         try {
             const response = await fetch("/api/checkout_sessions", {
                 method: "POST",
@@ -20,19 +49,18 @@ export default function PropertyActionButtons({ property }) {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    propertyId: property._id,
-                    title: property.title,
-                    rent: property.rent,
-                    rentType: property.rentType,
-                    image: property.images?.[0] || "",
-                    durationType: property.rentType,  // rentType go like "Yearly", 'Monthly', 'Weekly', 'Daily'
+                    propertyId: targetPropertyId,
+                    title: property?.title,
+                    rent: property?.rent,
+                    rentType: property?.rentType, 
+                    image: property?.images?.[0] || "",
+                    durationType: property?.rentType,
                 }),
             });
 
             const data = await response.json();
 
             if (data.url) {
-                // Redirecting to Stripe checkout page
                 window.location.href = data.url;
             } else {
                 setBookingLoading(false);
@@ -72,13 +100,18 @@ export default function PropertyActionButtons({ property }) {
 
             <button
                 onClick={handleToggleFavorite}
-                className={`w-full font-bold py-3.5 px-4 rounded-xl text-sm transition-all border flex items-center justify-center gap-2 active:scale-[0.98] shadow-sm cursor-pointer ${isSaved
-                    ? "bg-rose-500/10 border-rose-500 text-rose-500 hover:bg-rose-500/20"
-                    : "bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
+                disabled={favLoading}
+                className={`w-full font-bold py-3.5 px-4 rounded-xl text-sm transition-all border flex items-center justify-center gap-2 active:scale-[0.98] shadow-sm cursor-pointer disabled:opacity-70 ${isSaved
+                        ? "bg-rose-500/10 border-rose-500 text-rose-500 hover:bg-rose-500/20"
+                        : "bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
                     }`}
             >
-                <Heart size={18} className={isSaved ? "fill-rose-500 text-rose-500" : ""} />
-                <span>{isSaved ? "Saved to Favorites" : "Add to Favorites"}</span>
+                {favLoading ? (
+                    <Loader2 size={18} className="animate-spin text-rose-500" />
+                ) : (
+                    <Heart size={18} className={isSaved ? "fill-rose-500 text-rose-500" : ""} />
+                )}
+                <span>{isSaved ? "Remove from Favorites" : "Add to Favorites"}</span>
             </button>
         </div>
     );

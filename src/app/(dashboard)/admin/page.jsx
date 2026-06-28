@@ -2,8 +2,8 @@
 
 import { authClient } from "@/lib/auth-client";
 import { Users, UserCheck, Building2, Briefcase } from "lucide-react";
-import DashboardCard from "../../../component/dashboard/DashboardCard";
 import Loading from "@/app/loading";
+import DashboardCard from "../component/DashboardCard";
 
 function AdminDashboard() {
     const { data: session, isPending } = authClient.useSession();

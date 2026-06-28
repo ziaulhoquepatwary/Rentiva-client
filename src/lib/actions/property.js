@@ -68,7 +68,9 @@ export const getAllPropertiesAction = async (filters = {}) => {
 
 export const getPropertyDetail = async (id) => {
     try {
-        const res = await axios.get(`${baseApiUrl}/api/properties/${id}`);
+        const res = await axios.get(`${baseApiUrl}/api/properties/${id}`, {
+            withCredentials: true,
+        });
         return res.data;
     } catch (error) {
         console.error("Error fetching property detail on server:", error.message);
