@@ -1,42 +1,112 @@
 "use client";
-import React, { useState } from "react";
-import { Star, MessageSquare } from "lucide-react";
+
+import React, { useEffect, useState } from "react";
+import { Star, MessageSquare, Loader2, Trash2 } from "lucide-react";
+import { getPropertyReviewsApi, createReviewApi, deleteReviewApi } from "@/lib/actions/review";
+import Swal from "sweetalert2";
 
 export default function PropertyReviews({ propertyId }) {
     const [rating, setRating] = useState(5);
     const [comment, setComment] = useState("");
     const [hoverRating, setHoverRating] = useState(0);
-    const [dummyReviews, setDummyReviews] = useState([
-        { id: 1, author: "Alex Mercer", rating: 5, date: "2 days ago", comment: "Absolutely incredible experience. Beautifully lit room with magnificent view." },
-        { id: 2, author: "Sarah Connor", rating: 4, date: "1 week ago", comment: "Very quiet flat despite being directly downtown. Perfect kitchen setup." }
-    ]);
+    const [reviews, setReviews] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [submitting, setSubmitting] = useState(false);
 
-    const handleSubmitReview = (e) => {
+    console.log(propertyId);
+    // Fetch Reviews from Database
+    const fetchReviews = async () => {
+        try {
+            const response = await getPropertyReviewsApi(propertyId);
+            if (response.success) {
+                setReviews(response.data);
+            }
+        } catch (error) {
+            console.error("Failed to load reviews:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        if (propertyId) {
+            fetchReviews();
+        }
+    }, [propertyId]);
+
+    // Handle Review Submission
+    const handleSubmitReview = async (e) => {
         e.preventDefault();
         if (!comment.trim()) return;
 
-        const newReview = {
-            id: Date.now(),
-            author: "You",
-            rating,
-            date: "Just now",
-            comment: comment.trim()
-        };
+        setSubmitting(true);
+        try {
+            const response = await createReviewApi({
+                propertyId,
+                rating,
+                comment: comment.trim(),
+            });
 
-        setDummyReviews([newReview, ...dummyReviews]);
-        setComment("");
-        setRating(5);
+            if (response.success) {
+                // Prepend newly created review to the UI list
+                setReviews((prev) => [response.data, ...prev]);
+                setComment("");
+                setRating(5);
+
+                Swal.fire({
+                    toast: true,
+                    position: "top-end",
+                    icon: "success",
+                    title: "Review submitted successfully",
+                    showConfirmButton: false,
+                    timer: 2500,
+                });
+            }
+        } catch (error) {
+            Swal.fire({
+                icon: "error",
+                title: "Submission Failed",
+                text: error.response?.data?.message || "Something went wrong! Did you already review this property?",
+            });
+        } finally {
+            setSubmitting(false);
+        }
+    };
+
+    // Handle Delete (Bonus Feature for clean ownership flow)
+    const handleDeleteReview = async (reviewId) => {
+        const result = await Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this review!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#76ABAE",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        });
+
+        if (result.isConfirmed) {
+            try {
+                const response = await deleteReviewApi(reviewId);
+                if (response.success) {
+                    setReviews((prev) => prev.filter((rev) => rev._id !== reviewId));
+                    Swal.fire("Deleted!", "Your feedback has been removed.", "success");
+                }
+            } catch (error) {
+                Swal.fire("Error", error.response?.data?.message || "Unauthorized action", "error");
+            }
+        }
     };
 
     return (
-        <div className="bg-white dark:bg-[#294f69] p-6 sm:p-8 rounded-sm border border-slate-200 dark:border-slate-700/50 space-y-8">
+        <div className="bg-white dark:bg-[#1B3C53] p-6 sm:p-8 rounded-2xl border border-slate-200/60 dark:border-slate-700/50 space-y-8 shadow-sm text-[#1B3C53] dark:text-[#EEEEEE]">
             <div className="flex items-center gap-2 pb-2 border-b border-slate-100 dark:border-slate-700/50">
                 <MessageSquare className="text-[#76ABAE]" size={20} />
-                <h3 className="text-lg font-bold text-slate-900 dark:text-white">Resident Feedbacks</h3>
+                <h3 className="text-lg font-bold">Resident Feedbacks</h3>
             </div>
 
             {/* Review composition workspace */}
-            <form onSubmit={handleSubmitReview} className="space-y-4 bg-slate-50 dark:bg-slate-800/30 p-4 rounded-xl border border-slate-100 dark:border-slate-700/50">
+            <form onSubmit={handleSubmitReview} className="space-y-4 bg-slate-50/60 dark:bg-slate-800/20 p-5 rounded-2xl border border-slate-100 dark:border-slate-700/50">
                 <p className="text-xs font-bold uppercase tracking-wider text-slate-400">Share Your Experience</p>
 
                 {/* Dynamic Star Interactive system */}
@@ -48,13 +118,13 @@ export default function PropertyReviews({ propertyId }) {
                             onClick={() => setRating(starValue)}
                             onMouseEnter={() => setHoverRating(starValue)}
                             onMouseLeave={() => setHoverRating(0)}
-                            className="p-0.5 focus:outline-none transition-transform active:scale-90"
+                            className="p-0.5 focus:outline-none transition-transform active:scale-90 cursor-pointer"
                         >
                             <Star
-                                size={20}
+                                size={22}
                                 className={`transition-colors ${starValue <= (hoverRating || rating)
-                                        ? "text-amber-400 fill-amber-400"
-                                        : "text-slate-300 dark:text-slate-600"
+                                    ? "text-amber-400 fill-amber-400"
+                                    : "text-slate-300 dark:text-slate-600"
                                     }`}
                             />
                         </button>
@@ -67,42 +137,90 @@ export default function PropertyReviews({ propertyId }) {
                     value={comment}
                     onChange={(e) => setComment(e.target.value)}
                     placeholder="Write a constructive message about this listing..."
-                    className="w-full px-4 py-3 text-sm rounded-xl border bg-white dark:bg-slate-800 border-slate-200 dark:border-slate-600 focus:outline-none focus:ring-2 focus:ring-[#76ABAE]/30 focus:border-[#76ABAE] transition-all text-slate-800 dark:text-white"
+                    className="w-full px-4 py-3 text-sm rounded-xl border bg-white dark:bg-slate-800/40 border-slate-200 dark:border-slate-600 focus:outline-none focus:ring-2 focus:ring-[#76ABAE]/30 focus:border-[#76ABAE] transition-all text-slate-800 dark:text-white"
+                    required
                 />
 
                 <div className="flex justify-end">
                     <button
                         type="submit"
-                        className="bg-[#1B3C53] dark:bg-[#76ABAE] text-white dark:text-[#1B3C53] text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-xl hover:opacity-90 active:scale-95 transition-all shadow-sm"
+                        disabled={submitting}
+                        className="bg-[#1B3C53] dark:bg-[#76ABAE] text-white dark:text-[#1B3C53] text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded-xl hover:opacity-90 active:scale-95 transition-all shadow-sm flex items-center gap-2 cursor-pointer disabled:opacity-50"
                     >
-                        Submit Review
+                        {submitting && <Loader2 className="animate-spin" size={14} />}
+                        {submitting ? "Submitting..." : "Submit Review"}
                     </button>
                 </div>
             </form>
 
             {/* Rendered Reviews Pipeline */}
-            <div className="space-y-5">
-                {dummyReviews.map((rev) => (
-                    <div key={rev.id} className="text-sm space-y-1.5 pb-5 border-b border-slate-100 dark:border-slate-700/50 last:border-0 last:pb-0">
-                        <div className="flex items-center justify-between">
-                            <span className="font-bold text-slate-800 dark:text-white">{rev.author}</span>
-                            <span className="text-xs text-slate-400">{rev.date}</span>
-                        </div>
-                        {/* Rating Display */}
-                        <div className="flex items-center">
-                            {[1, 2, 3, 4, 5].map((star) => (
-                                <Star
-                                    key={star}
-                                    size={12}
-                                    className={star <= rev.rating ? "text-amber-400 fill-amber-400" : "text-slate-200 dark:text-slate-700"}
-                                />
-                            ))}
-                        </div>
-                        <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-xs sm:text-sm">
-                            {rev.comment}
-                        </p>
+            <div className="space-y-6">
+                {loading ? (
+                    <div className="flex justify-center items-center py-10">
+                        <Loader2 className="animate-spin mr-2 text-[#76ABAE]" size={20} />
+                        <span className="text-sm text-slate-400">Loading reviews...</span>
                     </div>
-                ))}
+                ) : (
+                    <>
+                        {reviews.map((rev) => (
+                            <div key={rev._id} className="flex gap-4 pb-5 border-b border-slate-100 dark:border-slate-700/40 last:border-0 last:pb-0 group">
+                                {/* Tenant Avatar from Better-Auth */}
+                                <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 bg-slate-100 dark:bg-slate-700 border border-slate-200/50 dark:border-slate-600">
+                                    <img
+                                        src={rev.tenantImage || "/avatar-placeholder.png"}
+                                        alt={rev.tenantName}
+                                        className="w-full h-full object-cover"
+                                    />
+                                </div>
+
+                                <div className="flex-grow space-y-1">
+                                    <div className="flex items-center justify-between">
+                                        <div>
+                                            <span className="font-bold text-sm text-slate-800 dark:text-white block sm:inline mr-2">{rev.tenantName}</span>
+                                            <span className="text-[10px] text-slate-400 block sm:inline">
+                                                {new Date(rev.createdAt).toLocaleDateString("en-US", {
+                                                    year: "numeric",
+                                                    month: "short",
+                                                    day: "numeric",
+                                                })}
+                                            </span>
+                                        </div>
+
+                                        {/* Trash button for removal if the database schema syncs user ownership */}
+                                        <button
+                                            onClick={() => handleDeleteReview(rev._id)}
+                                            className="opacity-0 group-hover:opacity-100 p-1.5 rounded text-rose-500 hover:bg-rose-500/10 transition-all cursor-pointer"
+                                            title="Delete Review"
+                                        >
+                                            <Trash2 size={14} />
+                                        </button>
+                                    </div>
+
+                                    {/* Rating Stars Grid */}
+                                    <div className="flex items-center gap-0.5">
+                                        {[1, 2, 3, 4, 5].map((star) => (
+                                            <Star
+                                                key={star}
+                                                size={12}
+                                                className={star <= rev.rating ? "text-amber-400 fill-amber-400" : "text-slate-200 dark:text-slate-700"}
+                                            />
+                                        ))}
+                                    </div>
+
+                                    <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-xs sm:text-sm pt-1">
+                                        {rev.comment}
+                                    </p>
+                                </div>
+                            </div>
+                        ))}
+
+                        {reviews.length === 0 && (
+                            <div className="text-center py-10 text-sm text-slate-400">
+                                No feedback submitted yet for this property. Be the first!
+                            </div>
+                        )}
+                    </>
+                )}
             </div>
         </div>
     );
