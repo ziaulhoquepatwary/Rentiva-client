@@ -10,7 +10,6 @@ export default function PropertyActionButtons({ property, isSavedFromBackend }) 
     const [bookingLoading, setBookingLoading] = useState(false);
     const [favLoading, setFavLoading] = useState(false);
 
-    // Update state if props change dynamically
     useEffect(() => {
         setIsSaved(isSavedFromBackend);
     }, [isSavedFromBackend]);
@@ -27,11 +26,11 @@ export default function PropertyActionButtons({ property, isSavedFromBackend }) 
                 setIsSaved(response.isSaved);
             }
         } catch (error) {
-            console.error("Failed to toggle favorite:", error);
+            console.error(error);
             Swal.fire({
                 icon: "error",
-                title: "Error",
-                text: "Failed to update favorite status. Please login first.",
+                title: "Authentication Failed",
+                text: "Please login to manage your saved properties.",
                 confirmButtonColor: "#1B3C53",
             });
         } finally {
@@ -52,7 +51,7 @@ export default function PropertyActionButtons({ property, isSavedFromBackend }) 
                     propertyId: targetPropertyId,
                     title: property?.title,
                     rent: property?.rent,
-                    rentType: property?.rentType, 
+                    rentType: property?.rentType,
                     image: property?.images?.[0] || "",
                     durationType: property?.rentType,
                 }),
@@ -67,51 +66,51 @@ export default function PropertyActionButtons({ property, isSavedFromBackend }) 
                 Swal.fire({
                     icon: "error",
                     title: "Booking Failed",
-                    text: data.error || "Something went wrong creating checkout session.",
+                    text: data.error || "Unable to initialize checkout session.",
                     confirmButtonColor: "#1B3C53",
                 });
             }
         } catch (error) {
-            console.error("Booking submission failure:", error);
+            console.error(error);
             setBookingLoading(false);
             Swal.fire({
                 icon: "error",
                 title: "Error",
-                text: "Failed to initiate booking. Please try again later.",
+                text: "Failed to initiate booking process. Please try again later.",
                 confirmButtonColor: "#1B3C53",
             });
         }
     };
 
     return (
-        <div className="space-y-4">
+        <div className="space-y-3">
             <button
                 onClick={handleTriggerBooking}
                 disabled={bookingLoading}
-                className="w-full bg-[#1B3C53] hover:bg-[#254f6d] dark:bg-[#76ABAE] dark:hover:bg-[#629295] text-white dark:text-[#1B3C53] font-bold py-3.5 px-4 rounded-xl text-sm transition-all flex items-center justify-center gap-2 active:scale-[0.98] disabled:opacity-60 cursor-pointer shadow-md hover:shadow-lg"
+                className="w-full bg-[#1B3C53] hover:bg-[#234d6b] dark:bg-[#76ABAE] dark:hover:bg-[#649295] text-white dark:text-[#1B3C53] font-bold py-3 px-4 rounded-xl text-xs uppercase tracking-wider transition-all flex items-center justify-center gap-2 active:scale-[0.99] disabled:opacity-60 cursor-pointer shadow-md hover:shadow-lg"
             >
                 {bookingLoading ? (
-                    <Loader2 size={18} className="animate-spin" />
+                    <Loader2 size={16} className="animate-spin" />
                 ) : (
-                    <CalendarCheck size={18} />
+                    <CalendarCheck size={16} />
                 )}
-                <span>{bookingLoading ? "Redirecting to Stripe..." : "Book Property Now"}</span>
+                <span>{bookingLoading ? "Redirecting..." : "Book Property Now"}</span>
             </button>
 
             <button
                 onClick={handleToggleFavorite}
                 disabled={favLoading}
-                className={`w-full font-bold py-3.5 px-4 rounded-xl text-sm transition-all border flex items-center justify-center gap-2 active:scale-[0.98] shadow-sm cursor-pointer disabled:opacity-70 ${isSaved
+                className={`w-full font-bold py-3 px-4 rounded-xl text-xs uppercase tracking-wider transition-all border flex items-center justify-center gap-2 active:scale-[0.99] shadow-sm cursor-pointer disabled:opacity-70 ${isSaved
                         ? "bg-rose-500/10 border-rose-500 text-rose-500 hover:bg-rose-500/20"
-                        : "bg-slate-50 dark:bg-slate-800/50 border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
+                        : "bg-slate-50 dark:bg-slate-800/40 border-slate-200/60 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
                     }`}
             >
                 {favLoading ? (
-                    <Loader2 size={18} className="animate-spin text-rose-500" />
+                    <Loader2 size={16} className="animate-spin text-rose-500" />
                 ) : (
-                    <Heart size={18} className={isSaved ? "fill-rose-500 text-rose-500" : ""} />
+                    <Heart size={16} className={isSaved ? "fill-rose-500 text-rose-500" : ""} />
                 )}
-                <span>{isSaved ? "Remove from Favorites" : "Add to Favorites"}</span>
+                <span>{isSaved ? "Saved" : "Save Listing"}</span>
             </button>
         </div>
     );
