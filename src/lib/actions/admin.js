@@ -29,3 +29,29 @@ export const updateUserRoleApi = async (userId, role) => {
         throw error;
     }
 };
+
+export const getPendingPropertiesApi = async (page = 1, limit = 10) => {
+    try {
+        const res = await axios.get(
+            `${baseApiUrl}/api/admin/properties/pending?page=${page}&limit=${limit}`,
+            { withCredentials: true }
+        );
+        return res.data;
+    } catch (error) {
+        console.error("Get pending properties API error:", error.response?.data || error.message);
+        throw error;
+    }
+};
+
+export const updatePendingPropertyApi = async (propertyId, status, rejectionFeedback = "") => {
+    try {
+        const res = await axios.patch(`${baseApiUrl}/api/admin/properties/${propertyId}/status`,
+            { status, rejectionFeedback },
+            { withCredentials: true }
+        );
+        return res.data;
+    } catch (error) {
+        console.error("Update property status API error:", error.response?.data || error.message);
+        throw error;
+    }
+};
