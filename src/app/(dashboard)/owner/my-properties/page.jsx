@@ -44,9 +44,13 @@ function MyProperties() {
         window.location.href = `/properties/edit/${id}`;
     };
 
-    const handleDelete = async (id) => {
-        if (confirm("Are you sure you want to delete this property?")) {
-            console.log("Delete property ID:", id);
+    const handleDeleteSuccess = (deletedId) => {
+        setProperties((prevProperties) =>
+            prevProperties.filter((property) => property._id !== deletedId)
+        );
+
+        if (properties.length === 1 && page > 1) {
+            setPage((prev) => prev - 1);
         }
     };
 
@@ -108,7 +112,7 @@ function MyProperties() {
                                                 feedback={property.rejectionFeedback}
                                                 onView={handleView}
                                                 onEdit={handleEdit}
-                                                onDelete={handleDelete}
+                                                onDeleteSuccess={handleDeleteSuccess}
                                                 onShowFeedback={setSelectedFeedback}
                                             />
                                         </div>

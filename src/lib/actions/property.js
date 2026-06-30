@@ -90,3 +90,15 @@ export const getMyPropertiesApi = async (page = 1, limit = 12, status = "Approve
         throw error;
     }
 };
+
+export const deletePropertyApi = async (propertyId) => {
+    try {
+        const res = await axios.delete(`${baseApiUrl}/api/properties/${propertyId}`, {
+            withCredentials: true,
+        });
+        return res.data;
+    } catch (error) {
+        console.error("Delete property error:", error.response?.data || error.message);
+        throw error;
+    }
+};
