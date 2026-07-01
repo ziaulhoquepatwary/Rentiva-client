@@ -71,7 +71,7 @@ function OwnerBookedProperty() {
                                 <th className="py-3 px-4">Tenant</th>
                                 <th className="py-3 px-4">Duration</th>
                                 <th className="py-3 px-4">Timeline</th>
-                                <th className="py-3 px-4">Earnings</th>
+                                <th className="py-3 px-4">Rent</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-[#E2E8F0] dark:divide-[#64748B] text-sm">

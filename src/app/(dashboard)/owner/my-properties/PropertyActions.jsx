@@ -68,7 +68,7 @@ function PropertyActions({ propertyId, status, feedback, onView, onShowFeedback,
                 View
             </button>
             <Link
-                href={`/dashboard/properties/edit/${propertyId}`} // Change this routing path based on your real edit page path
+                href={`/owner/edit/${propertyId}`} // Change this routing path based on your real edit page path
                 className="px-3 py-1.5 text-xs font-medium rounded-lg bg-[#76ABAE]/20 text-[#76ABAE] hover:bg-[#76ABAE] hover:text-white transition-colors cursor-pointer inline-block text-center"
             >
                 Edit

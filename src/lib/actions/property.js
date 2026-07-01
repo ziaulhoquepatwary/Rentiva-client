@@ -102,3 +102,17 @@ export const deletePropertyApi = async (propertyId) => {
         throw error;
     }
 };
+
+export const updatePropertyApi = async (propertyId, updatedData) => {
+    try {
+        const res = await axios.patch(
+            `${baseApiUrl}/api/properties/${propertyId}`,
+            updatedData,
+            { withCredentials: true }
+        );
+        return res.data;
+    } catch (error) {
+        console.error("Update property API error:", error.response?.data || error.message);
+        throw error;
+    }
+};
