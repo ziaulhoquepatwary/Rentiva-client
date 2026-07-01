@@ -81,3 +81,16 @@ export const getBookingHistoryApi = async (page = 1, limit = 10) => {
         throw error;
     }
 };
+
+export const getAdminDashboardStats = async (page = 1, limit = 10) => {
+    try {
+        const res = await axios.get(
+            `${baseApiUrl}/api/admin/user/count`,
+            { withCredentials: true }
+        );
+        return res.data;
+    } catch (error) {
+        console.error("Get booking history API error:", error.response?.data || error.message);
+        throw error;
+    }
+};
