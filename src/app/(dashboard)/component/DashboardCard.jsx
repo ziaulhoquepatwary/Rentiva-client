@@ -1,6 +1,6 @@
 "use client";
 
-import { Users, UserCheck, Building2, Briefcase } from "lucide-react";
+import { Users, UserCheck, Building2, Briefcase, Heart, DollarSign } from "lucide-react";
 
 const iconMap = {
     users: Users,
@@ -8,10 +8,12 @@ const iconMap = {
     tenants: UserCheck,
     properties: Building2,
     bookings: Briefcase,
+    favorites: Heart,
+    spend: DollarSign,
 };
 
 function DashboardCard({ iconId, title, value }) {
-    const IconComponent = iconMap[iconId] || Users;
+    const IconComponent = iconMap[iconId] || Briefcase;
 
     return (
         <div className="p-6 rounded-2xl border transition-all duration-300 bg-white border-[#E2E8F0] text-[#1B3C53] dark:bg-[#1B3C53] dark:border-[#64748B] dark:text-[#EEEEEE]/80 shadow-sm hover:shadow-md">
