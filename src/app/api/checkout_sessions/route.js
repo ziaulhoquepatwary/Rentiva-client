@@ -38,7 +38,7 @@ export async function POST(req) {
                 },
             ],
             mode: "payment",
-            success_url: `${req.nextUrl.origin}/success?title=${encodeURIComponent(title)}&amount=${rent}&id=${propertyId}`,
+            success_url: `${req.nextUrl.origin}/success?session_id={CHECKOUT_SESSION_ID}&title=${encodeURIComponent(title)}&amount=${rent}&id=${propertyId}`,
             cancel_url: `${req.nextUrl.origin}/canceled?id=${propertyId}`,
             metadata: {
                 userId: session.user.id,

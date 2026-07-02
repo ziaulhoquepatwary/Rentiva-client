@@ -27,3 +27,15 @@ export const getOwnerBookedPropertiesApi = async (page = 1, limit = 10, type = "
         throw error;
     }
 };
+
+export const checkBookingStatusApi = async (sessionId) => {
+    try {
+        const res = await axios.get(`${baseApiUrl}/api/bookings/check-status/${sessionId}`, {
+            withCredentials: true,
+        });
+        return res.data;
+    } catch (error) {
+        console.error("API error response:", error.response?.data || error.message);
+        throw error;
+    }
+};

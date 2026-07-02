@@ -1,93 +1,136 @@
 "use client";
-import React, { Suspense } from "react";
-import { useSearchParams } from "next/navigation";
-import Link from "next/link";
-import { CheckCircle2, Home, ArrowRight, Building } from "lucide-react";
 
-function SuccessContent() {
+import { useEffect, useState } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import { CheckCircle2, XCircle, Loader2, ArrowLeft, ArrowRight } from "lucide-react";
+import { checkBookingStatusApi } from "@/lib/actions/booking";
+
+export default function BookingSuccessPage() {
     const searchParams = useSearchParams();
-    const propertyTitle = searchParams.get("title") || "Property";
-    const amount = searchParams.get("amount") || "0";
-    const propertyId = searchParams.get("id") || "";
+    const router = useRouter();
+
+    const sessionId = searchParams.get("session_id");
+    const propertyTitle = searchParams.get("title");
+
+    const [loading, setLoading] = useState(true);
+    const [status, setStatus] = useState("checking"); // checking, success, refunded, error
+    const [message, setMessage] = useState("");
+
+    useEffect(() => {
+        let interval;
+        let attempts = 0;
+
+        const verifyWithBackend = async () => {
+            try {
+                const result = await checkBookingStatusApi(sessionId);
+
+                if (result.status === "success") {
+                    setStatus("success");
+                    setMessage(result.message);
+                    setLoading(false);
+                    clearInterval(interval);
+                } else if (result.status === "refunded") {
+                    setStatus("refunded");
+                    setMessage(result.message);
+                    setLoading(false);
+                    clearInterval(interval);
+                } else {
+                    attempts++;
+                    if (attempts >= 6) {
+                        setStatus("error");
+                        setMessage("Unable to verify booking status. Please check your dashboard or contact support.");
+                        setLoading(false);
+                        clearInterval(interval);
+                    }
+                }
+            } catch (err) {
+                console.error("Verification polling error:", err);
+                attempts++;
+                if (attempts >= 6) {
+                    setStatus("error");
+                    setMessage("A network error occurred while verifying your booking. Please check your dashboard.");
+                    setLoading(false);
+                    clearInterval(interval);
+                }
+            }
+        };
+
+        if (sessionId) {
+            interval = setInterval(verifyWithBackend, 2000);
+            verifyWithBackend();
+        } else {
+            setStatus("invalid");
+            setLoading(false);
+        }
+
+        return () => clearInterval(interval);
+    }, [sessionId]);
+
+    if (loading) {
+        return (
+            <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50 dark:bg-[#1B3C53] gap-3">
+                <Loader2 className="animate-spin text-[#76ABAE]" size={40} />
+                <h2 className="text-xl font-bold text-slate-800 dark:text-white">Confirming Booking Status...</h2>
+                <p className="text-sm text-slate-500 dark:text-slate-400">Please do not refresh or close this page.</p>
+            </div>
+        );
+    }
 
     return (
-        <main className="py-10 bg-slate-50 dark:bg-[#1B3C53] flex items-center justify-center p-4">
-            <div className="max-w-md w-full bg-white dark:bg-[#1e293b] rounded-2xl border border-slate-100 dark:border-slate-800 shadow-xl p-8 text-center space-y-6 transition-all">
+        <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-[#1B3C53] p-4">
+            <div className="max-w-md w-full bg-white dark:bg-[#294f69] p-8 rounded-2xl shadow-xl border border-slate-200/60 dark:border-slate-700/50 text-center space-y-6">
 
-                {/* Success Animation Icon */}
-                <div className="flex justify-center">
-                    <div className="p-3 bg-emerald-500/10 rounded-full text-emerald-500 dark:text-emerald-400 animate-bounce">
-                        <CheckCircle2 size={56} />
-                    </div>
-                </div>
-
-                {/* Header & Congratulations message */}
-                <div className="space-y-2">
-                    <h1 className="text-2xl font-extrabold text-slate-900 dark:text-white tracking-tight">
-                        Congratulations!
-                    </h1>
-                    <p className="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">
-                        Your payment has been processed successfully. Your booking is officially confirmed and ready for your stay!
-                    </p>
-                </div>
-
-                {/* Dynamic Summary Card */}
-                <div className="bg-slate-50 dark:bg-slate-900/50 p-5 rounded-xl border border-slate-100 dark:border-slate-800 text-left space-y-3.5">
-                    <div className="flex items-start gap-3">
-                        <Building size={18} className="text-[#76ABAE] mt-0.5 shrink-0" />
-                        <div>
-                            <p className="text-xs text-slate-400 font-medium uppercase tracking-wider">Booked Space</p>
-                            <p className="text-sm font-bold text-slate-800 dark:text-slate-200 mt-0.5 line-clamp-1">
-                                {propertyTitle}
-                            </p>
+                {status === "success" && (
+                    <>
+                        <div className="w-16 h-16 bg-emerald-500/10 text-emerald-500 rounded-full flex items-center justify-center mx-auto">
+                            <CheckCircle2 size={36} />
                         </div>
-                    </div>
+                        <h1 className="text-2xl font-black text-slate-900 dark:text-white">Payment Confirmed!</h1>
+                        <p className="text-sm font-semibold text-[#76ABAE]">{propertyTitle}</p>
+                        <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">{message}</p>
+                    </>
+                )}
 
-                    <div className="h-px bg-slate-200/60 dark:bg-slate-800 w-full" />
-
-                    <div className="flex justify-between items-center">
-                        <div>
-                            <p className="text-xs text-slate-400 font-medium uppercase tracking-wider">Amount Paid</p>
-                            <p className="text-xl font-black text-[#76ABAE] mt-0.5">
-                                ${amount}
-                            </p>
+                {status === "refunded" && (
+                    <>
+                        <div className="w-16 h-16 bg-amber-500/10 text-amber-500 rounded-full flex items-center justify-center mx-auto">
+                            <XCircle size={36} />
                         </div>
-                        <span className="text-xs font-bold uppercase tracking-wider bg-emerald-500/10 text-emerald-500 px-3 py-1 rounded-full border border-emerald-500/20">
-                            Paid
-                        </span>
-                    </div>
-                </div>
+                        <h1 className="text-2xl font-black text-amber-600 dark:text-amber-400">Property Already Taken!</h1>
+                        <p className="text-sm font-medium text-slate-500 dark:text-slate-400">Target: {propertyTitle}</p>
+                        <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed text-left bg-amber-500/5 p-4 rounded-xl border border-amber-500/10">
+                            {message}
+                        </p>
+                    </>
+                )}
 
-                {/* Encouraging Closer Text */}
-                <p className="text-xs italic text-slate-500 dark:text-slate-200">
-                    We hope you fully enjoy this wonderful space and make unforgettable memories.
-                </p>
+                {(status === "error" || status === "invalid") && (
+                    <>
+                        <div className="w-16 h-16 bg-rose-500/10 text-rose-500 rounded-full flex items-center justify-center mx-auto">
+                            <XCircle size={36} />
+                        </div>
+                        <h1 className="text-2xl font-black text-rose-500">Verification Error</h1>
+                        <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                            {message || "The checkout session could not be authenticated."}
+                        </p>
+                    </>
+                )}
 
-                {/* Professional Navigation Actions */}
-                <div className="pt-2">
-                    <Link
-                        href="/"
-                        className="w-full bg-[#1B3C53] hover:bg-[#254f6d] dark:bg-[#76ABAE] dark:hover:bg-[#629295] text-white dark:text-[#1B3C53] font-bold py-3 px-4 rounded-xl text-sm transition-all flex items-center justify-center gap-2 shadow-md active:scale-95"
+                <div className="pt-2 flex flex-col gap-2">
+                    <button
+                        onClick={() => router.push("/")}
+                        className="w-full flex items-center justify-center gap-2 py-3 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold text-xs uppercase tracking-wider rounded-xl hover:opacity-90 transition-all cursor-pointer"
                     >
-                        <Home size={16} />
-                        <span>Go Home</span>
-                    </Link>
+                        <ArrowLeft size={14} /> Back to Home
+                    </button>
+                    <button
+                        onClick={() => router.push("/tenant/my-bookings")}
+                        className="w-full flex items-center justify-center gap-2 py-3 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 font-bold text-xs uppercase tracking-wider rounded-xl hover:opacity-90 transition-all cursor-pointer"
+                    >
+                        <ArrowRight size={14} /> Go to Dashboard
+                    </button>
                 </div>
-
             </div>
-        </main>
-    );
-}
-
-// Next.js static rendering protection for useSearchParams
-export default function SuccessPage() {
-    return (
-        <Suspense fallback={
-            <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-[#0f172a]">
-                <p className="text-lg font-semibold text-slate-500">Loading receipt...</p>
-            </div>
-        }>
-            <SuccessContent />
-        </Suspense>
+        </div>
     );
 }

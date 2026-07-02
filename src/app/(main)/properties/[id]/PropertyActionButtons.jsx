@@ -4,11 +4,14 @@ import React, { useEffect, useState } from "react";
 import { Heart, CalendarCheck, Loader2 } from "lucide-react";
 import Swal from "sweetalert2";
 import { toggleFavoriteApi } from "@/lib/actions/favorite";
+import { getPropertyDetail } from '@/lib/actions/property';
 
 export default function PropertyActionButtons({ property, isSavedFromBackend }) {
     const [isSaved, setIsSaved] = useState(isSavedFromBackend || false);
     const [bookingLoading, setBookingLoading] = useState(false);
     const [favLoading, setFavLoading] = useState(false);
+
+    const targetPropertyId = property?._id || property?.id;
 
     useEffect(() => {
         setIsSaved(isSavedFromBackend);
@@ -17,8 +20,6 @@ export default function PropertyActionButtons({ property, isSavedFromBackend }) 
     const handleToggleFavorite = async () => {
         if (favLoading) return;
         setFavLoading(true);
-
-        const targetPropertyId = property?._id || property?.id;
 
         try {
             const response = await toggleFavoriteApi(targetPropertyId);
@@ -40,8 +41,30 @@ export default function PropertyActionButtons({ property, isSavedFromBackend }) 
 
     const handleTriggerBooking = async () => {
         setBookingLoading(true);
-        const targetPropertyId = property?._id || property?.id;
+
         try {
+            const statusData = await getPropertyDetail(targetPropertyId);
+
+            if (!statusData || !statusData.success || !statusData.data) {
+                throw new Error("Failed to verify property status");
+            }
+
+            console.log("Live status checking response:", statusData);
+
+            const currentProperty = statusData?.data?.property;
+
+            if (!currentProperty || currentProperty.bookingStatus === "Booked" || currentProperty.bookingStatus !== "Available") {
+                setBookingLoading(false);
+
+                await Swal.fire({
+                    icon: "error",
+                    title: "Listing Already Booked",
+                    text: "This property has just been reserved by another user. Please explore other available options.",
+                    confirmButtonColor: "#1B3C53",
+                });
+                return;
+            }
+
             const response = await fetch("/api/checkout_sessions", {
                 method: "POST",
                 headers: {
@@ -71,12 +94,12 @@ export default function PropertyActionButtons({ property, isSavedFromBackend }) 
                 });
             }
         } catch (error) {
-            console.error(error);
+            console.error("Booking safeguard crash error:", error);
             setBookingLoading(false);
             Swal.fire({
                 icon: "error",
-                title: "Error",
-                text: "Failed to initiate booking process. Please try again later.",
+                title: "Verification Error",
+                text: "Failed to verify property availability. Please try again later.",
                 confirmButtonColor: "#1B3C53",
             });
         }
@@ -94,15 +117,15 @@ export default function PropertyActionButtons({ property, isSavedFromBackend }) 
                 ) : (
                     <CalendarCheck size={16} />
                 )}
-                <span>{bookingLoading ? "Redirecting..." : "Book Property Now"}</span>
+                <span>{bookingLoading ? "Checking Availability..." : "Book Property Now"}</span>
             </button>
 
             <button
                 onClick={handleToggleFavorite}
                 disabled={favLoading}
                 className={`w-full font-bold py-3 px-4 rounded-xl text-xs uppercase tracking-wider transition-all border flex items-center justify-center gap-2 active:scale-[0.99] shadow-sm cursor-pointer disabled:opacity-70 ${isSaved
-                        ? "bg-rose-500/10 border-rose-500 text-rose-500 hover:bg-rose-500/20"
-                        : "bg-slate-50 dark:bg-slate-800/40 border-slate-200/60 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
+                    ? "bg-rose-500/10 border-rose-500 text-rose-500 hover:bg-rose-500/20"
+                    : "bg-slate-50 dark:bg-slate-800/40 border-slate-200/60 dark:border-slate-700 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800"
                     }`}
             >
                 {favLoading ? (

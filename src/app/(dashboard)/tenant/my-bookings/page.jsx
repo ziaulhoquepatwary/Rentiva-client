@@ -40,7 +40,7 @@ function TenantBookingProperty() {
         }
     };
 
-    console.log("Bookings:", bookings);
+    // console.log("Bookings:", bookings);
 
     return (
         <div className="w-full p-6 rounded-2xl border transition-all duration-300 bg-white border-[#E2E8F0] text-[#1B3C53] dark:bg-[#1B3C53] dark:border-[#64748B] dark:text-[#EEEEEE] shadow-sm">
