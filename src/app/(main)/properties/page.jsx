@@ -28,7 +28,7 @@ export default function PropertyPage() {
     const [loading, setLoading] = useState(true);
     const [meta, setMeta] = useState(null);
 
-    // Sync local input states if URL changes externally (e.g., from Banner Search)
+    // Sync local input states if URL changes externally 
     useEffect(() => {
         setLocalLocation(locationQuery);
         setLocalType(typeQuery);

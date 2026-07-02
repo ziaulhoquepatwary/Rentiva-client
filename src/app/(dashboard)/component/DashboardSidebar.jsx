@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LayoutDashboard, FilePlus, Heart, User, Building2, Briefcase, Users, Clock, ChevronRight } from "lucide-react";
+import { LayoutDashboard, FilePlus, Heart, User, Building2, Briefcase, Users, Clock, ChevronRight, X } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 
 const MENU_CONFIG = {
@@ -40,13 +40,19 @@ function DashboardSidebar({ isOpen, closeSidebar }) {
     const menuItems = MENU_CONFIG[role] || [];
 
     return (
-        <aside className={`w-64 h-screen flex flex-col justify-between border-r transition-all duration-300 z-50 bg-white border-[#E2E8F0] text-[#1B3C53] dark:bg-[#1B3C53] dark:border-[#64748B] dark:text-[#EEEEEE] fixed inset-y-0 left-0 md:sticky md:top-0 ${isOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"}`}>
+        <aside className={`w-64 h-screen flex flex-col justify-between border-r transition-all duration-300 z-50 bg-white border-[#E2E8F0] text-[#1B3C53] dark:bg-[#1B3C53] dark:border-[#64748B] dark:text-[#EEEEEE] fixed inset-y-0 left-0 lg:sticky lg:top-0 ${isOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"}`}>
             <div className="flex flex-col flex-1 overflow-y-auto pt-6">
-                <div className="px-6 mb-8">
+                <div className="px-6 mb-8 flex items-center justify-between">
                     <Link href="/" className="flex items-center gap-0.5 tracking-wider font-black text-2xl">
                         <span className="text-slate-800 dark:text-white">RENT</span>
                         <span className="text-[#76ABAE]">IVA</span>
                     </Link>
+                    <button
+                        onClick={() => closeSidebar?.()}
+                        className="lg:hidden p-1.5 rounded-lg text-[#1B3C53] hover:bg-[#E2E8F0] dark:text-[#EEEEEE] dark:hover:bg-[#64748B]"
+                    >
+                        <X size={20} />
+                    </button>
                 </div>
 
                 <div className="px-4 mb-6">

@@ -24,7 +24,7 @@ function DashboardHeader({ onMenuClick }) {
             <div className="flex items-center gap-4 flex-1 max-w-xl">
                 <button
                     onClick={onMenuClick}
-                    className="p-2 rounded-lg md:hidden text-[#1B3C53] hover:bg-[#E2E8F0] dark:text-[#EEEEEE] dark:hover:bg-[#64748B]"
+                    className="p-2 rounded-lg lg:hidden text-[#1B3C53] hover:bg-[#E2E8F0] dark:text-[#EEEEEE] dark:hover:bg-[#64748B]"
                 >
                     <Menu size={20} />
                 </button>

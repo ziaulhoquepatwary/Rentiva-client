@@ -9,8 +9,7 @@ function Dashboard({ children }) {
     return (
         <div className="flex min-h-screen bg-white dark:bg-[#1B3C53] transition-colors duration-300">
             <div
-                className={`fixed inset-y-0 left-0 z-50 transform transition-transform duration-300 md:relative md:translate-x-0 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-                    }`}
+                className={`fixed inset-y-0 left-0 z-50 transform transition-transform duration-300 lg:relative lg:translate-x-0 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
             >
                 <DashboardSidebar
                     isOpen={isSidebarOpen}
@@ -21,7 +20,7 @@ function Dashboard({ children }) {
             {isSidebarOpen && (
                 <div
                     onClick={() => setIsSidebarOpen(false)}
-                    className="fixed inset-0 bg-[#1B3C53]/40 z-40 md:hidden"
+                    className="fixed inset-0 bg-[#1B3C53]/40 z-40 lg:hidden"
                 />
             )}
 

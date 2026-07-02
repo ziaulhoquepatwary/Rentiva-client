@@ -17,7 +17,7 @@ function Register() {
 
     const { register, handleSubmit, formState: { errors }, reset } = useForm({
         defaultValues: {
-            role: "seeker"
+            role: "tenant"
         }
     });
 
@@ -158,15 +158,13 @@ function Register() {
                         </label>
                         <div className="relative">
                             <span className="absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-400">
-                                <UsersRound  size={18} />
+                                <UsersRound size={18} />
                             </span>
                             <select
                                 {...register("role")}
+                                defaultValue="tenant"
                                 className="w-full pl-11 pr-4 py-3 bg-white dark:bg-[#1B3C53] border border-slate-200 dark:border-slate-600 rounded-xl text-sm focus:outline-none focus:border-[#76ABAE] focus:ring-2 focus:ring-[#76ABAE]/20 transition-all text-gray-900 dark:text-white appearance-none cursor-pointer"
                             >
-                                <option defaultValue="" disabled selected>
-                                    Select Role
-                                </option>
                                 <option value="tenant">Tenant</option>
                                 <option value="owner">Landlord</option>
                             </select>

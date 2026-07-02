@@ -209,9 +209,15 @@ function PropertyForm({
                 {errors.images && <p className="text-xs text-red-500 mt-1">{errors.images.message}</p>}
                 <div className="flex flex-wrap gap-2 mt-2">
                     {imagesWatch.map((url, idx) => (
-                        <span key={idx} className="flex items-center gap-1 text-xs px-3 py-1 rounded-full bg-[#E2E8F0] text-[#1B3C53] dark:bg-[#64748B] dark:text-[#EEEEEE] truncate max-w-xs">
-                            {url}
-                            <button type="button" onClick={() => removeImage(idx)} className="text-red-500 font-bold ml-1 cursor-pointer">×</button>
+                        <span key={idx} className="flex items-center gap-1 text-xs px-3 py-1 rounded-full bg-[#E2E8F0] text-[#1B3C53] dark:bg-[#64748B] dark:text-[#EEEEEE] max-w-xs">
+                            <span className="truncate">{url}</span>
+                            <button
+                                type="button"
+                                onClick={() => removeImage(idx)}
+                                className="text-red-500 font-bold ml-1 shrink-0 cursor-pointer"
+                            >
+                                ×
+                            </button>
                         </span>
                     ))}
                 </div>
