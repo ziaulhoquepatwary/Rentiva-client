@@ -5,6 +5,7 @@ import { Heart, CalendarCheck, Loader2 } from "lucide-react";
 import Swal from "sweetalert2";
 import { toggleFavoriteApi } from "@/lib/actions/favorite";
 import { getPropertyDetail } from '@/lib/actions/property';
+import { authClient } from "@/lib/auth-client";
 
 export default function PropertyActionButtons({ property, isSavedFromBackend }) {
     const [isSaved, setIsSaved] = useState(isSavedFromBackend || false);
@@ -65,6 +66,19 @@ export default function PropertyActionButtons({ property, isSavedFromBackend }) 
                 return;
             }
 
+            const { data: sessionData } = await authClient.getSession();
+
+            if (!sessionData || !sessionData.user) {
+                setBookingLoading(false);
+                await Swal.fire({
+                    icon: "error",
+                    title: "Login Required",
+                    text: "Please login to book this property.",
+                    confirmButtonColor: "#1B3C53",
+                });
+                return;
+            }
+
             const response = await fetch("/api/checkout_sessions", {
                 method: "POST",
                 headers: {
@@ -77,6 +91,8 @@ export default function PropertyActionButtons({ property, isSavedFromBackend }) 
                     rentType: property?.rentType,
                     image: property?.images?.[0] || "",
                     durationType: property?.rentType,
+                    userEmail: sessionData.user.email,
+                    userId: sessionData.user.id,
                 }),
             });
 
