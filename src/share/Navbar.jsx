@@ -15,6 +15,9 @@ function Navbar() {
     const { data: session, isPending } = authClient.useSession();
     const pathname = usePathname();
 
+    console.log(session);
+
+
     const isDarkMode = mounted ? theme === 'dark' : true;
 
     const user = session?.user;

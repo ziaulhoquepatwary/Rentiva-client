@@ -35,7 +35,7 @@ function CanceledContent() {
                 </div>
 
                 {/* Professional Navigation Actions */}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                <div className="pt-2">
                     <Link
                         href="/"
                         className="w-full bg-white/10 hover:bg-white/20 text-white font-bold py-3 px-4 rounded-xl text-sm transition-all border border-white/10 flex items-center justify-center gap-2 active:scale-95"

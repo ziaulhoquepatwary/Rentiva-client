@@ -1,12 +1,20 @@
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
-import { auth } from "@/lib/auth";
+import { authClient } from "@/lib/auth-client";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export async function POST(req) {
     try {
-        const session = await auth.api.getSession({ headers: req.headers });
+        const { data: session } = await authClient.getSession({
+            fetchOptions: {
+                headers: {
+                    cookie: req.headers.get("cookie") || "",
+                },
+            },
+        });
+
+        console.log("stripe session:", session)
 
         if (!session || !session.user) {
             return NextResponse.json({ error: "Unauthorized. Please login." }, { status: 401 });
