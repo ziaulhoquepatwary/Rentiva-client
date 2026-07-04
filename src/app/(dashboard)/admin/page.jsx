@@ -1,62 +1,37 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import AdminWelcome from "./AdminWelcome";
 import DashboardCard from "../component/DashboardCard";
-import Loading from "@/app/loading";
 import { fetchAdminDashboardStats } from "@/lib/actions/dashobard";
 
-function AdminDashboard() {
-    const [stats, setStats] = useState([]);
-    const [loading, setLoading] = useState(true);
+export default async function AdminDashboard() {
+    const res = await fetchAdminDashboardStats();
 
-    useEffect(() => {
-        const fetchDashboardStats = async () => {
-            try {
-                const res = await fetchAdminDashboardStats();
-
-                if (res.success) {
-                    setStats([
-                        {
-                            id: "users",
-                            title: "Total Users",
-                            value: res.data.totalUsers,
-                        },
-                        {
-                            id: "owners",
-                            title: "Total Owners",
-                            value: res.data.totalOwners,
-                        },
-                        {
-                            id: "tenants",
-                            title: "Total Tenants",
-                            value: res.data.totalTenants,
-                        },
-                        {
-                            id: "properties",
-                            title: "Total Properties",
-                            value: res.data.totalProperties,
-                        },
-                        {
-                            id: "bookings",
-                            title: "Total Bookings",
-                            value: res.data.totalBookings,
-                        },
-                    ]);
-                }
-            } catch (error) {
-                console.error("Failed to fetch dashboard stats:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        fetchDashboardStats();
-    }, []);
-
-    if (loading) {
-        return <Loading />
-    }
+    const stats = [
+        {
+            id: "users",
+            title: "Total Users",
+            value: res?.totalUsers || 0,
+        },
+        {
+            id: "owners",
+            title: "Total Owners",
+            value: res?.totalOwners || 0,
+        },
+        {
+            id: "tenants",
+            title: "Total Tenants",
+            value: res?.totalTenants || 0,
+        },
+        {
+            id: "properties",
+            title: "Total Properties",
+            value: res?.totalProperties || 0,
+        },
+        {
+            id: "bookings",
+            title: "Total Bookings",
+            value: res?.totalBookings || 0,
+        },
+    ];
 
     return (
         <div className="space-y-8">
@@ -75,5 +50,3 @@ function AdminDashboard() {
         </div>
     );
 }
-
-export default AdminDashboard;
