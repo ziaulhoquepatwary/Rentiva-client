@@ -1,11 +1,14 @@
-import { fetchOwnertDashboardStats } from "@/lib/actions/dashobard";
+import { fetchOwnerMonthlyEarnings, fetchOwnertDashboardStats } from "@/lib/actions/dashobard";
 import DashboardCard from "../component/DashboardCard";
 import OwnerWelcome from "./OwnerWelcome";
+import OwnerEarningsChart from "../component/OwnerEarningsChart";
 
 async function OwnerDashboardPage() {
     const ownerStats = await fetchOwnertDashboardStats();
+    const monthlyEarningsData = await fetchOwnerMonthlyEarnings();
 
     console.log(ownerStats)
+    console.log(monthlyEarningsData)
 
     const totalProperty = ownerStats?.totalProperties || 0;
     const totalEarnings = ownerStats?.totalEarnings || 0;
@@ -49,6 +52,11 @@ async function OwnerDashboardPage() {
                         value={stat.value}
                     />
                 ))}
+            </div>
+            <div className="p-6 space-y-6">
+                <div className="w-full">
+                    <OwnerEarningsChart chartData={monthlyEarningsData} />
+                </div>
             </div>
         </div>
     );

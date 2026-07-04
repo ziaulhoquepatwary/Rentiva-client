@@ -59,3 +59,22 @@ export async function fetchAdminDashboardStats() {
         return null;
     }
 }
+
+export async function fetchOwnerMonthlyEarnings() {
+    try {
+        const cookieStore = await cookies();
+        const allCookies = cookieStore.toString();
+
+        const res = await axios.get(`${baseApiUrl}/api/earning/owner/monthly-earning`, {
+            withCredentials: true,
+            headers: {
+                Cookie: allCookies,
+            }
+        });
+
+        return res.data?.data?.monthlyEarnings || res.data?.monthlyEarnings || [];
+    } catch (error) {
+        console.error("Owner Monthly Earnings Fetch Error:", error);
+        return [];
+    }
+}
