@@ -1,13 +1,32 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import AdminWelcome from "./AdminWelcome";
 import DashboardCard from "../component/DashboardCard";
 import { fetchAdminDashboardStats } from "@/lib/actions/dashobard";
 
-export const dynamic = "force-dynamic";
-export const fetchCache = "force-no-store";
-export const revalidate = 0;
+export default function AdminDashboard() {
+    const [res, setRes] = useState(null);
+    const [loading, setLoading] = useState(true);
 
-export default async function AdminDashboard() {
-    const res = await fetchAdminDashboardStats();
+    useEffect(() => {
+        async function loadAdminStats() {
+            try {
+                const data = await fetchAdminDashboardStats();
+                setRes(data);
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        loadAdminStats();
+    }, []);
+
+    if (loading) {
+        return <div className="p-6 text-center">Loading...</div>;
+    }
 
     const stats = [
         {

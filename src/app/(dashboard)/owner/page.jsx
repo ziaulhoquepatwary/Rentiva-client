@@ -1,18 +1,41 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import { fetchOwnerMonthlyEarnings, fetchOwnertDashboardStats } from "@/lib/actions/dashobard";
 import DashboardCard from "../component/DashboardCard";
 import OwnerWelcome from "./OwnerWelcome";
 import OwnerEarningsChart from "../component/OwnerEarningsChart";
 
-export const dynamic = "force-dynamic";
-export const fetchCache = "force-no-store";
-export const revalidate = 0;
-
-async function OwnerDashboardPage() {
-    const ownerStats = await fetchOwnertDashboardStats();
-    const monthlyEarningsData = await fetchOwnerMonthlyEarnings();
+function OwnerDashboardPage() {
+    const [ownerStats, setOwnerStats] = useState(null);
+    const [monthlyEarningsData, setMonthlyEarningsData] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     console.log(ownerStats)
     console.log(monthlyEarningsData)
+
+    useEffect(() => {
+        async function loadDashboardData() {
+            try {
+                const [stats, earnings] = await Promise.all([
+                    fetchOwnertDashboardStats(),
+                    fetchOwnerMonthlyEarnings()
+                ]);
+                setOwnerStats(stats);
+                setMonthlyEarningsData(earnings);
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        loadDashboardData();
+    }, []);
+
+    if (loading) {
+        return <div className="p-6 text-center">Loading...</div>;
+    }
 
     const totalProperty = ownerStats?.totalProperties || 0;
     const totalEarnings = ownerStats?.totalEarnings || 0;
@@ -41,7 +64,6 @@ async function OwnerDashboardPage() {
             value: totalPendingProperties.toLocaleString(),
         },
     ];
-
 
     return (
         <div className="space-y-8">

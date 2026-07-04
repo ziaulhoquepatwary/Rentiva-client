@@ -1,28 +1,18 @@
-import { cookies } from "next/headers";
-import { unstable_noStore as noStore } from "next/cache";
+import axios from "axios";
 
 const baseApiUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 async function fetchLiveWithNoCache(endpoint) {
-
-    const cookieStore = await cookies();
-    const allCookies = cookieStore.toString();
-
-    const res = await fetch(`${baseApiUrl}${endpoint}?t=${Date.now()}`, {
-        method: "GET",
+    const res = await axios.get(`${baseApiUrl}${endpoint}`, {
+        withCredentials: true,
         headers: {
-            "Cookie": allCookies,
             "Cache-Control": "no-store, no-cache, must-revalidate",
-            "Pragma": "no-cache"
-        },
-        cache: "no-store",
+            "Pragma": "no-cache",
+            "Expires": "0"
+        }
     });
 
-    if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`);
-    }
-
-    return await res.json();
+    return res.data;
 }
 
 export async function fetchTenantDashboardStats() {

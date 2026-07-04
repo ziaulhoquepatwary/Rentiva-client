@@ -1,13 +1,32 @@
+"use client";
+
+import { useState, useEffect } from "react";
 import { fetchTenantDashboardStats } from "@/lib/actions/dashobard";
 import DashboardCard from "../component/DashboardCard";
 import TenantWelcome from "./TenantWelcome";
 
-export const dynamic = "force-dynamic";
-export const fetchCache = "force-no-store";
-export const revalidate = 0;
+function TenantDashboardPage() {
+    const [tenantStats, setTenantStats] = useState(null);
+    const [loading, setLoading] = useState(true);
 
-async function TenantDashboardPage() {
-    const tenantStats = await fetchTenantDashboardStats();
+    useEffect(() => {
+        async function loadTenantStats() {
+            try {
+                const data = await fetchTenantDashboardStats();
+                setTenantStats(data);
+            } catch (error) {
+                console.error(error);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        loadTenantStats();
+    }, []);
+
+    if (loading) {
+        return <div className="p-6 text-center">Loading...</div>;
+    }
 
     const totalBookings = tenantStats?.totalBookings || 0;
     const totalFavorites = tenantStats?.totalFavorites || 0;
