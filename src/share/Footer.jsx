@@ -1,6 +1,3 @@
-// components/Footer.jsx
-import React from "react";
-import Link from "next/link";
 import { FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from "react-icons/fa";
 import { Mail, MapPin, Phone } from "lucide-react";
 
@@ -14,27 +11,27 @@ export default function Footer() {
 
                     {/* Brand Column */}
                     <div className="lg:col-span-2 space-y-5">
-                        <Link href="/" className="flex items-center gap-0.5 tracking-wider font-black text-2xl">
+                        <div className="flex items-center gap-0.5 tracking-wider font-black text-2xl select-none">
                             <span className="text-slate-800 dark:text-white transition-colors duration-300">RENT</span>
                             <span className="text-[#76ABAE]">IVA</span>
-                        </Link>
+                        </div>
                         <p className="text-sm font-normal text-[#1B3C53]/80 dark:text-[#EEEEEE]/70 max-w-sm leading-relaxed">
                             A transparent and secure rental marketplace connecting tenants and property owners. Discover, book, and pay reservation fees online with absolute peace of mind.
                         </p>
                         {/* Social Icons */}
                         <div className="flex items-center gap-4 pt-2">
-                            <a href="#" className="p-2 rounded-lg border border-[#E2E8F0] dark:border-[#64748B] hover:border-[#76ABAE] dark:hover:border-[#76ABAE] hover:text-[#76ABAE] dark:hover:text-[#76ABAE] transition-all duration-200">
+                            <span className="p-2 rounded-lg border border-[#E2E8F0] dark:border-[#64748B] hover:border-[#76ABAE] dark:hover:border-[#76ABAE] hover:text-[#76ABAE] dark:hover:text-[#76ABAE] transition-all duration-200 cursor-default">
                                 <FaFacebookF size={18} />
-                            </a>
-                            <a href="#" className="p-2 rounded-lg border border-[#E2E8F0] dark:border-[#64748B] hover:border-[#76ABAE] dark:hover:border-[#76ABAE] hover:text-[#76ABAE] dark:hover:text-[#76ABAE] transition-all duration-200">
+                            </span>
+                            <span className="p-2 rounded-lg border border-[#E2E8F0] dark:border-[#64748B] hover:border-[#76ABAE] dark:hover:border-[#76ABAE] hover:text-[#76ABAE] dark:hover:text-[#76ABAE] transition-all duration-200 cursor-default">
                                 <FaTwitter size={18} />
-                            </a>
-                            <a href="#" className="p-2 rounded-lg border border-[#E2E8F0] dark:border-[#64748B] hover:border-[#76ABAE] dark:hover:border-[#76ABAE] hover:text-[#76ABAE] dark:hover:text-[#76ABAE] transition-all duration-200">
+                            </span>
+                            <span className="p-2 rounded-lg border border-[#E2E8F0] dark:border-[#64748B] hover:border-[#76ABAE] dark:hover:border-[#76ABAE] hover:text-[#76ABAE] dark:hover:text-[#76ABAE] transition-all duration-200 cursor-default">
                                 <FaInstagram size={18} />
-                            </a>
-                            <a href="#" className="p-2 rounded-lg border border-[#E2E8F0] dark:border-[#64748B] hover:border-[#76ABAE] dark:hover:border-[#76ABAE] hover:text-[#76ABAE] dark:hover:text-[#76ABAE] transition-all duration-200">
+                            </span>
+                            <span className="p-2 rounded-lg border border-[#E2E8F0] dark:border-[#64748B] hover:border-[#76ABAE] dark:hover:border-[#76ABAE] hover:text-[#76ABAE] dark:hover:text-[#76ABAE] transition-all duration-200 cursor-default">
                                 <FaLinkedinIn size={18} />
-                            </a>
+                            </span>
                         </div>
                     </div>
 
@@ -45,16 +42,16 @@ export default function Footer() {
                         </h3>
                         <ul className="space-y-2.5 text-sm font-medium">
                             <li>
-                                <Link href="/properties" className="hover:text-[#76ABAE] transition-colors">Find Properties</Link>
+                                <span className="hover:text-[#76ABAE] transition-colors cursor-default">Find Properties</span>
                             </li>
                             <li>
-                                <Link href="/list-property" className="hover:text-[#76ABAE] transition-colors">List Your Property</Link>
+                                <span className="hover:text-[#76ABAE] transition-colors cursor-default">List Your Property</span>
                             </li>
                             <li>
-                                <Link href="/pricing" className="hover:text-[#76ABAE] transition-colors">Pricing Plans</Link>
+                                <span className="hover:text-[#76ABAE] transition-colors cursor-default">Pricing Plans</span>
                             </li>
                             <li>
-                                <Link href="/reviews" className="hover:text-[#76ABAE] transition-colors">Testimonials</Link>
+                                <span className="hover:text-[#76ABAE] transition-colors cursor-default">Testimonials</span>
                             </li>
                         </ul>
                     </div>
@@ -66,16 +63,16 @@ export default function Footer() {
                         </h3>
                         <ul className="space-y-2.5 text-sm font-medium">
                             <li>
-                                <Link href="/about" className="hover:text-[#76ABAE] transition-colors">About Us</Link>
+                                <span className="hover:text-[#76ABAE] transition-colors cursor-default">About Us</span>
                             </li>
                             <li>
-                                <Link href="/contact" className="hover:text-[#76ABAE] transition-colors">Contact Support</Link>
+                                <span className="hover:text-[#76ABAE] transition-colors cursor-default">Contact Support</span>
                             </li>
                             <li>
-                                <Link href="/blogs" className="hover:text-[#76ABAE] transition-colors">Insights & News</Link>
+                                <span className="hover:text-[#76ABAE] transition-colors cursor-default">Insights & News</span>
                             </li>
                             <li>
-                                <Link href="/careers" className="hover:text-[#76ABAE] transition-colors">Careers</Link>
+                                <span className="hover:text-[#76ABAE] transition-colors cursor-default">Careers</span>
                             </li>
                         </ul>
                     </div>
@@ -107,9 +104,9 @@ export default function Footer() {
                 <div className="mt-12 pt-8 border-t border-[#E2E8F0] dark:border-[#64748B] flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-medium text-[#1B3C53]/60 dark:text-[#EEEEEE]/50">
                     <p>© {new Date().getFullYear()} RENTIVA. All rights reserved.</p>
                     <div className="flex items-center gap-6">
-                        <Link href="/privacy" className="hover:text-[#76ABAE] transition-colors">Privacy Policy</Link>
-                        <Link href="/terms" className="hover:text-[#76ABAE] transition-colors">Terms of Service</Link>
-                        <Link href="/cookies" className="hover:text-[#76ABAE] transition-colors">Cookie Settings</Link>
+                        <span className="hover:text-[#76ABAE] transition-colors cursor-default">Privacy Policy</span>
+                        <span className="hover:text-[#76ABAE] transition-colors cursor-default">Terms of Service</span>
+                        <span className="hover:text-[#76ABAE] transition-colors cursor-default">Cookie Settings</span>
                     </div>
                 </div>
 

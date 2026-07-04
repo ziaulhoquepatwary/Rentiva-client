@@ -3,6 +3,8 @@ import { useState } from "react";
 import DashboardSidebar from "./component/DashboardSidebar";
 import DashboardHeader from "./component/DashboardHeader";
 
+export const dynamic = "force-dynamic";
+
 function Dashboard({ children }) {
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
