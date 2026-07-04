@@ -4,13 +4,15 @@ import OwnerWelcome from "./OwnerWelcome";
 import OwnerEarningsChart from "../component/OwnerEarningsChart";
 
 export const dynamic = "force-dynamic";
+export const fetchCache = "force-no-store";
+export const revalidate = 0;
 
 async function OwnerDashboardPage() {
     const ownerStats = await fetchOwnertDashboardStats();
     const monthlyEarningsData = await fetchOwnerMonthlyEarnings();
 
-    // console.log(ownerStats)
-    // console.log(monthlyEarningsData)
+    console.log(ownerStats)
+    console.log(monthlyEarningsData)
 
     const totalProperty = ownerStats?.totalProperties || 0;
     const totalEarnings = ownerStats?.totalEarnings || 0;
