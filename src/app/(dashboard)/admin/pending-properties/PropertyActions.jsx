@@ -5,12 +5,10 @@ import { Loader2, Eye, Check, X } from "lucide-react";
 import Swal from "sweetalert2";
 import { updatePendingPropertyApi } from "@/lib/actions/admin";
 import PropertyDetailsModal from "./PropertyDetailsModal";
-import { useRouter } from "next/navigation";
 
-export default function PropertyActions({ property }) {
+export default function PropertyActions({ property, onPropertyUpdated }) {
     const [actionLoading, setActionLoading] = useState(false);
     const [showModal, setShowModal] = useState(false);
-    const router = useRouter();
 
     const handleStatusUpdate = async (propertyId, status, manualFeedback = "") => {
         let feedback = manualFeedback;
@@ -61,7 +59,10 @@ export default function PropertyActions({ property }) {
                     showConfirmButton: false,
                     timer: 2500
                 });
-                router.refresh();
+
+                if (onPropertyUpdated) {
+                    onPropertyUpdated(propertyId);
+                }
             }
         } catch (error) {
             Swal.fire("Failed", error.response?.data?.message || "Something went wrong", "error");

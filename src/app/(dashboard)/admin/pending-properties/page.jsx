@@ -39,6 +39,17 @@ export default function AdminPendingPropertiesPage() {
         fetchData();
     }, [page]);
 
+    const handlePropertyUpdated = (propertyId) => {
+        setProperties(prevProperties =>
+            prevProperties.filter(p => p._id !== propertyId)
+        );
+
+        setMeta(prevMeta => ({
+            ...prevMeta,
+            totalProperties: prevMeta.totalProperties - 1
+        }));
+    };
+
     if (loading) {
         return <div className="text-center py-20 text-slate-400">Loading properties...</div>;
     }
@@ -106,7 +117,10 @@ export default function AdminPendingPropertiesPage() {
                                         </div>
                                     </td>
                                     <td className="p-4 text-center">
-                                        <PropertyActions property={property} />
+                                        <PropertyActions
+                                            property={property}
+                                            onPropertyUpdated={handlePropertyUpdated}
+                                        />
                                     </td>
                                 </tr>
                             );
