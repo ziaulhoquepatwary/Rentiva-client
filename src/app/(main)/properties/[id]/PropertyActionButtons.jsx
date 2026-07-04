@@ -20,20 +20,42 @@ export default function PropertyActionButtons({ property, isSavedFromBackend }) 
 
     const handleToggleFavorite = async () => {
         if (favLoading) return;
+
         setFavLoading(true);
 
         try {
             const response = await toggleFavoriteApi(targetPropertyId);
+
             if (response.success) {
                 setIsSaved(response.isSaved);
+
+                Swal.fire({
+                    toast: true,
+                    position: "top-end",
+                    icon: "success",
+                    title:
+                        response.message ||
+                        (response.isSaved
+                            ? "Property saved successfully."
+                            : "Property removed from your saved list."),
+                    showConfirmButton: false,
+                    timer: 2000,
+                    timerProgressBar: true,
+                });
             }
         } catch (error) {
-            console.error(error);
+            console.error("Favorite toggle error:", error);
+
             Swal.fire({
+                toast: true,
+                position: "top-end",
                 icon: "error",
-                title: "Authentication Failed",
-                text: "Please login to manage your saved properties.",
-                confirmButtonColor: "#1B3C53",
+                title:
+                    error?.response?.data?.message ||
+                    "Please login to manage your saved properties.",
+                showConfirmButton: false,
+                timer: 2500,
+                timerProgressBar: true,
             });
         } finally {
             setFavLoading(false);
