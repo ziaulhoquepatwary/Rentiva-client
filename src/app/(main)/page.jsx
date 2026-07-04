@@ -11,8 +11,8 @@ function Home() {
         <div>
             <Banner />
             <WhyChooseUs />
-            <FeaturesOverview />
             <FeaturedProperties />
+            <FeaturesOverview />
             <Reviews />
         </div>
     )

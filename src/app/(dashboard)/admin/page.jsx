@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import AdminWelcome from "./AdminWelcome";
 import DashboardCard from "../component/DashboardCard";
-import { getAdminDashboardStats } from "@/lib/actions/admin";
 import Loading from "@/app/loading";
+import { fetchAdminDashboardStats } from "@/lib/actions/dashobard";
 
 function AdminDashboard() {
     const [stats, setStats] = useState([]);
@@ -13,7 +13,7 @@ function AdminDashboard() {
     useEffect(() => {
         const fetchDashboardStats = async () => {
             try {
-                const res = await getAdminDashboardStats();
+                const res = await fetchAdminDashboardStats();
 
                 if (res.success) {
                     setStats([

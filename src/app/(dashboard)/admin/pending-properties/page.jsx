@@ -1,19 +1,47 @@
-import React from "react";
+"use client";
+
+import React, { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Building2, User } from "lucide-react";
 import { getPendingPropertiesApi } from "@/lib/actions/admin";
 import PropertyActions from "./PropertyActions";
 import AdminPagination from "./AdminPagination";
 
-export default async function AdminPendingPropertiesPage({ searchParams }) {
-    const resolvedParams = await searchParams;
-    const page = resolvedParams.page ? parseInt(resolvedParams.page, 10) : 1;
+export default function AdminPendingPropertiesPage() {
+    const router = useRouter();
+    const searchParams = useSearchParams();
 
-    const response = await getPendingPropertiesApi(page, 10);
-    const properties = response?.success ? (response.data || []) : [];
-    const meta = {
-        totalPages: response?.totalPages || 1,
-        totalProperties: response?.totalProperties || 0
-    };
+    const page = searchParams.get("page") ? parseInt(searchParams.get("page"), 10) : 1;
+
+    const [properties, setProperties] = useState([]);
+    const [meta, setMeta] = useState({ totalPages: 1, totalProperties: 0 });
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            setLoading(true);
+            try {
+                const response = await getPendingPropertiesApi(page, 10);
+                if (response?.success) {
+                    setProperties(response.data || []);
+                    setMeta({
+                        totalPages: response.totalPages || 1,
+                        totalProperties: response.totalProperties || 0
+                    });
+                }
+            } catch (error) {
+                console.error("Error fetching components on client side:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, [page]);
+
+    if (loading) {
+        return <div className="text-center py-20 text-slate-400">Loading properties...</div>;
+    }
 
     return (
         <div className="w-full p-6 rounded-2xl border transition-all duration-300 bg-white border-[#E2E8F0] text-[#1B3C53] dark:bg-[#1B3C53] dark:border-[#64748B]/40 dark:text-[#EEEEEE] shadow-sm">

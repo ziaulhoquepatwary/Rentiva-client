@@ -10,6 +10,7 @@ const iconMap = {
     bookings: Briefcase,
     favorites: Heart,
     spend: DollarSign,
+    earnings: DollarSign,
 };
 
 function DashboardCard({ iconId, title, value }) {

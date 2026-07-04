@@ -1,48 +1,57 @@
-"use client";
-
-import { authClient } from "@/lib/auth-client";
-import { DollarSign, Building2, Briefcase, Clock } from "lucide-react";
-import Loading from "@/app/loading";
+import { fetchOwnertDashboardStats } from "@/lib/actions/dashobard";
 import DashboardCard from "../component/DashboardCard";
+import OwnerWelcome from "./OwnerWelcome";
 
-function OwnerDashboard() {
-    const { data: session, isPending } = authClient.useSession();
-    const user = session?.user;
+async function OwnerDashboardPage() {
+    const ownerStats = await fetchOwnertDashboardStats();
 
-    if (isPending) {
-        return <Loading />;
-    }
+    console.log(ownerStats)
+
+    const totalProperty = ownerStats?.totalProperties || 0;
+    const totalEarnings = ownerStats?.totalEarnings || 0;
+    const totalBookings = ownerStats?.totalBookings || 0;
+    const totalPendingProperties = ownerStats?.pendingProperties || 0;
 
     const stats = [
-        { title: "Total Earnings", value: "$4,250", icon: DollarSign },
-        { title: "Total Properties", value: "6", icon: Building2 },
-        { title: "Total Bookings", value: "28", icon: Briefcase },
-        { title: "Pending Approvals", value: "2", icon: Clock },
+        {
+            iconId: "DollarSign",
+            title: "Total Earnings",
+            value: totalEarnings.toLocaleString(),
+        },
+        {
+            iconId: "properties",
+            title: "Total Properties",
+            value: totalProperty.toLocaleString(),
+        },
+        {
+            iconId: "bookings",
+            title: "Total Bookings",
+            value: totalBookings.toLocaleString(),
+        },
+        {
+            iconId: "properties",
+            title: "Pending Approvals",
+            value: totalPendingProperties.toLocaleString(),
+        },
     ];
+
 
     return (
         <div className="space-y-8">
-            <div>
-                <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-[#1B3C53] dark:text-[#EEEEEE]">
-                    Welcome back, {user?.name || "Owner"}
-                </h1>
-                <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-                    Here is what's happening with your properties today.
-                </p>
-            </div>
+            <OwnerWelcome />
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
                 {stats.map((stat, index) => (
                     <DashboardCard
                         key={index}
+                        iconId={stat.iconId}
                         title={stat.title}
                         value={stat.value}
-                        icon={stat.icon}
                     />
                 ))}
             </div>
         </div>
     );
-};
+}
 
-export default OwnerDashboard;
+export default OwnerDashboardPage;
