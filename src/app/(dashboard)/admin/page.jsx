@@ -2,6 +2,8 @@ import AdminWelcome from "./AdminWelcome";
 import DashboardCard from "../component/DashboardCard";
 import { fetchAdminDashboardStats } from "@/lib/actions/dashobard";
 
+export const dynamic = "force-dynamic";
+
 export default async function AdminDashboard() {
     const res = await fetchAdminDashboardStats();
 

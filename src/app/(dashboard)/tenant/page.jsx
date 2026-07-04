@@ -2,6 +2,8 @@ import { fetchTenantDashboardStats } from "@/lib/actions/dashobard";
 import DashboardCard from "../component/DashboardCard";
 import TenantWelcome from "./TenantWelcome";
 
+export const dynamic = "force-dynamic";
+
 async function TenantDashboardPage() {
     const tenantStats = await fetchTenantDashboardStats();
 

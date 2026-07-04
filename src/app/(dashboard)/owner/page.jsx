@@ -3,6 +3,8 @@ import DashboardCard from "../component/DashboardCard";
 import OwnerWelcome from "./OwnerWelcome";
 import OwnerEarningsChart from "../component/OwnerEarningsChart";
 
+export const dynamic = "force-dynamic";
+
 async function OwnerDashboardPage() {
     const ownerStats = await fetchOwnertDashboardStats();
     const monthlyEarningsData = await fetchOwnerMonthlyEarnings();
