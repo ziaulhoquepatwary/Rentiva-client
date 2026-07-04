@@ -1,8 +1,10 @@
 import { cookies } from "next/headers";
+import { unstable_noStore as noStore } from "next/cache";
 
 const baseApiUrl = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 async function fetchLiveWithNoCache(endpoint) {
+
     const cookieStore = await cookies();
     const allCookies = cookieStore.toString();
 
@@ -13,7 +15,7 @@ async function fetchLiveWithNoCache(endpoint) {
             "Cache-Control": "no-store, no-cache, must-revalidate",
             "Pragma": "no-cache"
         },
-        cache: "no-store", 
+        cache: "no-store",
     });
 
     if (!res.ok) {
