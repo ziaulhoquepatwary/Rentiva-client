@@ -8,10 +8,13 @@ export async function fetchTenantDashboardStats() {
         const cookieStore = await cookies();
         const allCookies = cookieStore.toString();
 
-        const res = await axios.get(`${baseApiUrl}/api/dashboard/tenant/deshboard-overview`, {
+        const res = await axios.get(`${baseApiUrl}/api/dashboard/tenant/deshboard-overview?t=${Date.now()}`, {
             withCredentials: true,
             headers: {
                 Cookie: allCookies,
+                'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+                'Pragma': 'no-cache',
+                'Expires': '0',
             }
         });
 
@@ -27,16 +30,19 @@ export async function fetchOwnertDashboardStats() {
         const cookieStore = await cookies();
         const allCookies = cookieStore.toString();
 
-        const res = await axios.get(`${baseApiUrl}/api/dashboard/owner/deshboard-overview`, {
+        const res = await axios.get(`${baseApiUrl}/api/dashboard/owner/deshboard-overview?t=${Date.now()}`, {
             withCredentials: true,
             headers: {
                 Cookie: allCookies,
+                'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+                'Pragma': 'no-cache',
+                'Expires': '0',
             }
         });
 
         return res.data.data;
     } catch (error) {
-        console.error("Tenant Fetch Error:", error);
+        console.error("Owner Fetch Error:", error);
         return null;
     }
 }
@@ -46,16 +52,19 @@ export async function fetchAdminDashboardStats() {
         const cookieStore = await cookies();
         const allCookies = cookieStore.toString();
 
-        const res = await axios.get(`${baseApiUrl}/api/dashboard/admin/deshboard-overview`, {
+        const res = await axios.get(`${baseApiUrl}/api/dashboard/admin/deshboard-overview?t=${Date.now()}`, {
             withCredentials: true,
             headers: {
                 Cookie: allCookies,
+                'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+                'Pragma': 'no-cache',
+                'Expires': '0',
             }
         });
 
         return res.data.data;
     } catch (error) {
-        console.error("Tenant Fetch Error:", error);
+        console.error("Admin Fetch Error:", error);
         return null;
     }
 }
@@ -65,10 +74,13 @@ export async function fetchOwnerMonthlyEarnings() {
         const cookieStore = await cookies();
         const allCookies = cookieStore.toString();
 
-        const res = await axios.get(`${baseApiUrl}/api/earning/owner/monthly-earning`, {
+        const res = await axios.get(`${baseApiUrl}/api/earning/owner/monthly-earning?t=${Date.now()}`, {
             withCredentials: true,
             headers: {
                 Cookie: allCookies,
+                'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+                'Pragma': 'no-cache',
+                'Expires': '0',
             }
         });
 
