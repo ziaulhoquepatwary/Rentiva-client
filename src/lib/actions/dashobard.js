@@ -54,3 +54,13 @@ export async function fetchOwnerMonthlyEarnings() {
         return [];
     }
 }
+
+export async function fetchAdminMonthlyEarnings() {
+    try {
+        const data = await fetchLiveWithNoCache("/api/earning/admin/monthly-earning");
+        return data?.data
+    } catch (error) {
+        console.error("Admin Monthly Earnings Fetch Error:", error);
+        return [];
+    }
+}

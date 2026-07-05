@@ -1,6 +1,7 @@
 "use client";
 
 import { getOwnerBookedPropertiesApi } from "@/lib/actions/booking";
+import { Loader2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
 function OwnerBookedProperty() {
@@ -50,8 +51,8 @@ function OwnerBookedProperty() {
                             key={tab}
                             onClick={() => handleTypeChange(tab)}
                             className={`px-4 py-2 text-xs font-semibold capitalize rounded-lg transition-all cursor-pointer ${type === tab
-                                    ? "bg-[#76ABAE] text-white shadow-sm"
-                                    : "text-slate-500 dark:text-slate-400 hover:text-[#1B3C53] dark:hover:text-white"
+                                ? "bg-[#76ABAE] text-white shadow-sm"
+                                : "text-slate-500 dark:text-slate-400 hover:text-[#1B3C53] dark:hover:text-white"
                                 }`}
                         >
                             {tab}
@@ -61,7 +62,10 @@ function OwnerBookedProperty() {
             </div>
 
             {loading ? (
-                <div className="text-center py-10 text-[#1B3C53] dark:text-[#EEEEEE]">Loading booking records...</div>
+                <div className="flex justify-center items-center py-24">
+                    <Loader2 className="animate-spin mr-2 text-[#76ABAE]" size={24} />
+                    <span className="text-sm text-slate-400">Aggregating schedule logs...</span>
+                </div>
             ) : (
                 <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse">

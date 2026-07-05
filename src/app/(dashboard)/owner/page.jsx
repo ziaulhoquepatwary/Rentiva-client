@@ -5,6 +5,7 @@ import { fetchOwnerMonthlyEarnings, fetchOwnertDashboardStats } from "@/lib/acti
 import DashboardCard from "../component/DashboardCard";
 import OwnerWelcome from "./OwnerWelcome";
 import OwnerEarningsChart from "../component/OwnerEarningsChart";
+import { Loader2 } from "lucide-react";
 
 function OwnerDashboardPage() {
     const [ownerStats, setOwnerStats] = useState(null);
@@ -34,7 +35,12 @@ function OwnerDashboardPage() {
     }, []);
 
     if (loading) {
-        return <div className="p-6 text-center">Loading...</div>;
+        return (
+            <div className="flex justify-center items-center py-24">
+                <Loader2 className="animate-spin mr-2 text-[#76ABAE]" size={24} />
+                <span className="text-sm text-slate-400">Aggregating schedule logs...</span>
+            </div>
+        )
     }
 
     const totalProperty = ownerStats?.totalProperties || 0;

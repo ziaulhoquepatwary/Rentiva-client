@@ -3,17 +3,28 @@
 import { useState, useEffect } from "react";
 import AdminWelcome from "./AdminWelcome";
 import DashboardCard from "../component/DashboardCard";
-import { fetchAdminDashboardStats } from "@/lib/actions/dashobard";
+import { fetchAdminDashboardStats, fetchAdminMonthlyEarnings } from "@/lib/actions/dashobard";
+import OwnerEarningsChart from "../component/OwnerEarningsChart";
+import { Loader2 } from "lucide-react";
 
 export default function AdminDashboard() {
     const [res, setRes] = useState(null);
+    const [monthlyEarningsData, setMonthlyEarningsData] = useState([]);
+    const [totalEarning, setTotalEarnings] = useState(0);
     const [loading, setLoading] = useState(true);
 
+    console.log(res, monthlyEarningsData);
+
     useEffect(() => {
-        async function loadAdminStats() {
+        async function loadDashboardData() {
             try {
-                const data = await fetchAdminDashboardStats();
-                setRes(data);
+                const [stats, earnings] = await Promise.all([
+                    fetchAdminDashboardStats(),
+                    fetchAdminMonthlyEarnings()
+                ]);
+                setRes(stats);
+                setTotalEarnings(earnings.totalEarnings);
+                setMonthlyEarningsData(earnings.monthlyEarnings);
             } catch (error) {
                 console.error(error);
             } finally {
@@ -21,11 +32,16 @@ export default function AdminDashboard() {
             }
         }
 
-        loadAdminStats();
+        loadDashboardData();
     }, []);
 
     if (loading) {
-        return <div className="p-6 text-center">Loading...</div>;
+        return (
+            <div className="flex justify-center items-center py-24">
+                <Loader2 className="animate-spin mr-2 text-[#76ABAE]" size={24} />
+                <span className="text-sm text-slate-400">Aggregating schedule logs...</span>
+            </div>
+        )
     }
 
     const stats = [
@@ -69,6 +85,13 @@ export default function AdminDashboard() {
                         value={stat.value}
                     />
                 ))}
+            </div>
+
+            <div className="p-6 space-y-6">
+                <h1 className="text-2xl font-bold">Total Earnings: ${totalEarning}</h1>
+                <div className="w-full">
+                    <OwnerEarningsChart chartData={monthlyEarningsData} />
+                </div>
             </div>
         </div>
     );

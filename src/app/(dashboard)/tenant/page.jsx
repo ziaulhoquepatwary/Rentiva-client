@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { fetchTenantDashboardStats } from "@/lib/actions/dashobard";
 import DashboardCard from "../component/DashboardCard";
 import TenantWelcome from "./TenantWelcome";
+import { Loader2 } from "lucide-react";
 
 function TenantDashboardPage() {
     const [tenantStats, setTenantStats] = useState(null);
@@ -25,7 +26,12 @@ function TenantDashboardPage() {
     }, []);
 
     if (loading) {
-        return <div className="p-6 text-center">Loading...</div>;
+        return (
+            <div className="flex justify-center items-center py-24">
+                <Loader2 className="animate-spin mr-2 text-[#76ABAE]" size={24} />
+                <span className="text-sm text-slate-400">Aggregating schedule logs...</span>
+            </div>
+        )
     }
 
     const totalBookings = tenantStats?.totalBookings || 0;

@@ -1,6 +1,7 @@
 "use client";
 
 import { getMyBookingsApi } from "@/lib/actions/booking";
+import { Loader2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 
 function TenantBookingProperty() {
@@ -64,7 +65,10 @@ function TenantBookingProperty() {
             </div>
 
             {loading ? (
-                <div className="text-center py-10 text-[#1B3C53] dark:text-[#EEEEEE]">Loading bookings...</div>
+                <div className="flex justify-center items-center py-24">
+                    <Loader2 className="animate-spin mr-2 text-[#76ABAE]" size={24} />
+                    <span className="text-sm text-slate-400">Aggregating schedule logs...</span>
+                </div>
             ) : (
                 <div className="overflow-x-auto">
                     <table className="w-full text-left border-collapse">

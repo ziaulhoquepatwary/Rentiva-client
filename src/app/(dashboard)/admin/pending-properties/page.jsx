@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Building2, User } from "lucide-react";
+import { Building2, Loader2, User } from "lucide-react";
 import { getPendingPropertiesApi } from "@/lib/actions/admin";
 import PropertyActions from "./PropertyActions";
 import AdminPagination from "./AdminPagination";
@@ -51,7 +51,12 @@ export default function AdminPendingPropertiesPage() {
     };
 
     if (loading) {
-        return <div className="text-center py-20 text-slate-400">Loading properties...</div>;
+        return (
+            <div className="flex justify-center items-center py-24">
+                <Loader2 className="animate-spin mr-2 text-[#76ABAE]" size={24} />
+                <span className="text-sm text-slate-400">Aggregating schedule logs...</span>
+            </div>
+        )
     }
 
     return (
