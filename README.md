@@ -31,10 +31,10 @@ The application is built with a modern tech stack featuring **Next.js 16**, **Re
 ## 📸 Screenshots
 
 ### **Homepage**
-![Homepage](public/screenshots/homepage.png)
+![Homepage](./public/home-page.png)
 
 ### **Dashboard - Tenant View**
-![Dashboard Tenant](public/screenshots/dashboard-tenant.png)
+![Dashboard Tenant](./public/dashboards.png)
 
 ---
 
